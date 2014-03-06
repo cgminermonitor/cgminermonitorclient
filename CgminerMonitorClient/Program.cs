@@ -42,8 +42,9 @@ namespace CgminerMonitorClient
                 Thread.Sleep(1000);
             }
 
-            Log.Instance.Info("Exiting");
+// ReSharper disable FunctionNeverReturns //yeah it returns - in updater with Environment.Exit(0)
         }
+// ReSharper restore FunctionNeverReturns
 
         private static void StartWorkers(Config config)
         {
