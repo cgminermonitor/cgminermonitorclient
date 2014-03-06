@@ -1,0 +1,80 @@
+﻿using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
+using CgminerMonitorClient.CgminerMonitor.Common;
+using CgminerMonitorClient.Utils;
+using CgminerMonitorClient.Workers;
+using CgminerMonitorClient.Workers.Cgminer;
+using CgminerMonitorClient.Workers.Hardware;
+using CgminerMonitorClient.Workers.Update;
+using Newtonsoft.Json;
+
+namespace CgminerMonitorClient
+{
+    internal class Program
+    {
+        private static void Main(string[] args)
+        {
+            var runOptions = new RunOptions();
+
+            var p = new OptionSet
+            {
+                {"h|?|help", v => ShowHelp()},
+                {"v|verbose|d|debug", v => Log.Instance.ToggleLevel(Log.Level.Verbose)},
+                {"configFile=", runOptions.SetConfigFileName},
+            };
+            p.Parse(args);
+
+            Log.Instance.DebugFormat("Running client: {0}", ClientMetadata.GetCurrentClientMetadata().Dump());
+            Log.Instance.DebugFormat("Config file name: {0}", runOptions.ConfigFileName);
+
+            if (!File.Exists(runOptions.ConfigFileName))
+                new FirstTimeSetup().Execute(runOptions.ConfigFileName);
+            var config = ReadConfig(runOptions.ConfigFileName);
+
+            Log.Instance.InfoFormat("Started process id: {0}.", Process.GetCurrentProcess().Id);
+            StartWorkers(config);
+
+            while (true)
+            {
+                Thread.Sleep(1000);
+            }
+
+            Log.Instance.Info("Exiting");
+        }
+
+        private static void StartWorkers(Config config)
+        {
+            Log.Instance.Debug("Starting workers.");
+            var workers = new List<IWorkerDefinition>
+            {
+                new HardwareWorker("StatHardware"),
+                new CgminerWorker("StatCgminer"),
+                new UpdateWorker()
+            };
+            foreach (var worker in workers)
+            {
+                var w = worker;
+                Task.Factory.StartNew(() => w.Start(config));
+            }
+            Log.Instance.Debug("Workers started.");
+        }
+
+        private static Config ReadConfig(string configFileName)
+        {
+            Log.Instance.Debug("Reading config");
+            var config = JsonConvert.DeserializeObject<Config>(File.ReadAllText(configFileName));
+            Log.Instance.Debug("Config read.");
+            return config;
+        }
+
+        private static void ShowHelp()
+        {
+            Log.Instance.Info("h|?|help - show this message");
+            Log.Instance.Info("v|verbose - show detailed activity");
+            Log.Instance.Info("configFile - specify config file name instead of default one");
+        }
+    }
+}
