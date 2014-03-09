@@ -30,8 +30,8 @@ namespace CgminerMonitorClient
             Log.Instance.Info("\t4. Configure cgminer:");
             Log.Instance.InfoRaw(@"Pass additional command-line arguments: 
         --api-listen --api-allow W:127.0.0.1
-Or add additional configuration file entries (separate entries with commas!): 
-        ""api-listen"" : true 
+Or add additional configuration file entries: 
+        ""api-listen"" : true,
         ""api-allow"" : ""W:127.0.0.1""
 Press enter when you are done.");
             Log.Instance.Info("\t5. If you changed default API port, type it now. Otherwise press enter.");
