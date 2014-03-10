@@ -75,7 +75,7 @@ namespace CgminerMonitorClient
         private static void ShowHelp()
         {
             Log.Instance.Info("h|?|help - show this message");
-            Log.Instance.Info("v|verbose - show detailed activity");
+            Log.Instance.Info("v|verbose|d|debug - show detailed activity");
             Log.Instance.Info("configFile - specify config file name instead of default one");
         }
     }
