@@ -7,7 +7,7 @@ namespace CgminerMonitorClient.Workers
 {
     public abstract class AbstractWorker : IWorkerDefinition
     {
-        private static int SleepSecondsAfterFailure = 1;
+        private const int SleepSecondsAfterFailure = 2;
         protected readonly string StatisticKey;
         private readonly RetryingHttpClient _client;
 
