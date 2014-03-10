@@ -132,6 +132,7 @@
     <Compile Include="CgminerMonitor.Common\StatisticsResultMessage.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="Consts.cs" />
+    <Compile Include="CurrentProcessFileNameValidator.cs" />
     <Compile Include="FirstTimeSetup.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

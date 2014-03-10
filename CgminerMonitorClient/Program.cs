@@ -35,6 +35,7 @@ namespace CgminerMonitorClient
             var config = ReadConfig(runOptions.ConfigFileName);
 
             Log.Instance.InfoFormat("Started process id: {0}.", Process.GetCurrentProcess().Id);
+            new CurrentProcessFileNameValidator().Validate();
             StartWorkers(config);
 
             while (true)
