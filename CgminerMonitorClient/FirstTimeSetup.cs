@@ -2,6 +2,7 @@
 using System.IO;
 using System.Text;
 using System.Threading;
+using CgminerMonitorClient.CgminerMonitor.Common;
 using CgminerMonitorClient.Utils;
 using Newtonsoft.Json;
 
@@ -58,8 +59,37 @@ Press enter when you are done.");
             Log.Instance.Info("\t6. Checking read-write permissions.");
             if (PermissionCheckSucceeded())
                 Log.Instance.Info("\t\tAll is good.");
+            CheckLibcSoLinking();
             Log.Instance.Info("Thats all. Starting up!");
             File.WriteAllText(configFileName, JsonConvert.SerializeObject(config, Formatting.Indented), Encoding.UTF8);
+        }
+
+        private static void CheckLibcSoLinking()
+        {
+            var currentClinetMetadata = ClientMetadata.GetCurrentClientMetadata();
+            if (currentClinetMetadata.ClientPlatform == ClientPlatform.Windows)
+                return;
+            Log.Instance.Info("\t7. Checking libc.so linking.");
+            if (File.Exists("libc.so"))
+                Log.Instance.Info("\t\tGreat, libc.so found!");
+            else
+            {
+                Log.Instance.Info("libc.so NOT found!");
+                switch (currentClinetMetadata.ClientArchitecture)
+                {
+                    case ClientArchitecture.x64:
+                        Log.Instance.Info("Please run command: 'sudo ln -s /lib/x86_64-linux-gnu/libc.so.6 ./libc.so'");
+                        break;
+                    case ClientArchitecture.x86:
+                        Log.Instance.Info("Please run command: 'sudo ln -s /lib/i386-linux-gnu/libc.so.6 ./libc.so'");
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+                Log.Instance.Info(
+                    "Be warned! Client will probably fail to run if you don't have Mono installed! Press enter to continue.");
+                Console.ReadLine();
+            }
         }
 
         public bool PermissionCheckSucceeded()
