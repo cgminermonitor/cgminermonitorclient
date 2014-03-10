@@ -60,7 +60,7 @@ namespace CgminerMonitorClient.Workers
                     else
                     {
                         Log.Instance.InfoFormat("Error occured while sending {0} data.", StatisticKey);
-                        Log.Instance.InfoFormat("Error code: {0}, Message: {1}", result.ErrorCode, result.ErrorMessage);
+                        Log.Instance.DebugFormat("Error code: {0}, Message: {1}", result.ErrorCode, result.ErrorMessage);
                         Thread.Sleep(TimeSpan.FromSeconds(3));
                     }
                 }
