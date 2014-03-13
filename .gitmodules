@@ -1,0 +1,3 @@
+[submodule "NAppUpdateMono"]
+	path = NAppUpdateMono
+	url = https://github.com/piotrwest/NAppUpdateMono.git
