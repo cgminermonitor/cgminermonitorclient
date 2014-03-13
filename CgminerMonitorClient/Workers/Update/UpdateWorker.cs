@@ -10,8 +10,9 @@ namespace CgminerMonitorClient.Workers.Update
 {
     public class UpdateWorker : IWorkerDefinition
     {
-        public void Start(Config config)
+        public void Start(object configObject)
         {
+            var config = (Config) configObject;
             try
             {
                 Log.Instance.Debug("Starting updates worker.");

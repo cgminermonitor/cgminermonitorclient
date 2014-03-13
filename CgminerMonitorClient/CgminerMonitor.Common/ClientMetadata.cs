@@ -13,7 +13,7 @@ namespace CgminerMonitorClient.CgminerMonitor.Common
         {
             return new ClientMetadata
             {
-                ClientArchitecture = Environment.Is64BitProcess ? ClientArchitecture.x64 : ClientArchitecture.x86,
+                ClientArchitecture = IntPtr.Size == 8 ? ClientArchitecture.x64 : ClientArchitecture.x86,
                 ClientPlatform = PlatformCheck.AreWeRunningUnderWindows() ? ClientPlatform.Windows : ClientPlatform.Linux,
                 ClientVersion = VersionUtil.GetAsString(),
             };

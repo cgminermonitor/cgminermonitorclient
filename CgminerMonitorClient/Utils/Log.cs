@@ -21,7 +21,7 @@ namespace CgminerMonitorClient.Utils
         private Log(Level level)
         {
             _level = Level.Off;
-            _level = _level.Add(level);
+            _level = EnumerationExtensions.Add(_level, level);
         }
 
         public static Log Instance
@@ -44,51 +44,51 @@ namespace CgminerMonitorClient.Utils
 
         public void ToggleLevel(Level level)
         {
-            if (_level.Has(level))
-                _level = _level.Remove(level);
+            if (EnumerationExtensions.Has(_level, level))
+                _level = EnumerationExtensions.Remove(_level, level);
             else
-                _level = _level.Add(level);
+                _level = EnumerationExtensions.Add(_level, level);
         }
 
         public void Info(object message, Exception exception)
         {
-            if (_level.HasFlag(Level.Normal))
+            if (EnumerationExtensions.Has(_level, Level.Normal))
                 WriteToConsole(message + Environment.NewLine + exception);
         }
 
         public void Info(object message)
         {
-            if (_level.HasFlag(Level.Normal))
+            if (EnumerationExtensions.Has(_level, Level.Normal))
                 WriteToConsole(message.ToString());
         }
 
         public void InfoRaw(object message)
         {
-            if (_level.HasFlag(Level.Normal))
+            if (EnumerationExtensions.Has(_level, Level.Normal))
                 WriteToConsoleRaw(message.ToString());
         }
 
         public void InfoFormat(string format, params object[] args)
         {
-            if (_level.HasFlag(Level.Normal))
+            if (EnumerationExtensions.Has(_level, Level.Normal))
                 WriteToConsole(string.Format(format, args));
         }
 
         public void Debug(object message, Exception exception)
         {
-            if (_level.HasFlag(Level.Verbose))
+            if (EnumerationExtensions.Has(_level, Level.Verbose))
                 WriteToConsole(message + Environment.NewLine + exception);
         }
 
         public void Debug(object message)
         {
-            if (_level.HasFlag(Level.Verbose))
+            if (EnumerationExtensions.Has(_level, Level.Verbose))
                 WriteToConsole(message.ToString());
         }
 
         public void DebugFormat(string format, params object[] args)
         {
-            if (_level.HasFlag(Level.Verbose))
+            if (EnumerationExtensions.Has(_level, Level.Verbose))
                 WriteToConsole(string.Format(format, args));
         }
 

@@ -123,21 +123,18 @@
 //      p.Parse (new string[]{"-a-"});  // sets v == null
 //
 
-
-
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
-using System.Linq;
 using System.Runtime.Serialization;
 using System.Security.Permissions;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace CgminerMonitorClient.Utils
+namespace NDesk.Options
 {
 
     public class OptionValueCollection : IList, IList<string>
@@ -714,33 +711,33 @@ namespace CgminerMonitorClient.Utils
             return new OptionContext(this);
         }
 
-		public List<string> Parse (IEnumerable<string> arguments)
-		{
-			bool process = true;
-			OptionContext c = CreateOptionContext ();
-			c.OptionIndex = -1;
-			var def = GetOptionForName ("<>");
-			var unprocessed = 
-				from argument in arguments
-				where ++c.OptionIndex >= 0 && (process || def != null)
-					? process
-						? argument == "--" 
-							? (process = false)
-							: !Parse (argument, c)
-								? def != null 
-									? Unprocessed (null, def, c, argument) 
-									: true
-								: false
-						: def != null 
-							? Unprocessed (null, def, c, argument)
-							: true
-					: true
-				select argument;
-			List<string> r = unprocessed.ToList ();
-			if (c.Option != null)
-				c.Option.Invoke (c);
-			return r;
-		}
+        public List<string> Parse(IEnumerable<string> arguments)
+        {
+            OptionContext c = CreateOptionContext();
+            c.OptionIndex = -1;
+            bool process = true;
+            List<string> unprocessed = new List<string>();
+            Option def = Contains("<>") ? this["<>"] : null;
+            foreach (string argument in arguments)
+            {
+                ++c.OptionIndex;
+                if (argument == "--")
+                {
+                    process = false;
+                    continue;
+                }
+                if (!process)
+                {
+                    Unprocessed(unprocessed, def, c, argument);
+                    continue;
+                }
+                if (!Parse(argument, c))
+                    Unprocessed(unprocessed, def, c, argument);
+            }
+            if (c.Option != null)
+                c.Option.Invoke(c);
+            return unprocessed;
+        }
 
         private static bool Unprocessed(ICollection<string> extra, Option def, OptionContext c, string argument)
         {

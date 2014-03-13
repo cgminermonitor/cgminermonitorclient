@@ -5,7 +5,7 @@ namespace CgminerMonitorClient.Utils
     public static class EnumerationExtensions
     {
 
-        public static bool Has<T>(this System.Enum type, T value)
+        public static bool Has<T>(Enum type, T value)
         {
             try
             {
@@ -17,7 +17,7 @@ namespace CgminerMonitorClient.Utils
             }
         }
 
-        public static bool Is<T>(this System.Enum type, T value)
+        public static bool Is<T>(Enum type, T value)
         {
             try
             {
@@ -30,7 +30,7 @@ namespace CgminerMonitorClient.Utils
         }
 
 
-        public static T Add<T>(this System.Enum type, T value)
+        public static T Add<T>(Enum type, T value)
         {
             try
             {
@@ -47,7 +47,7 @@ namespace CgminerMonitorClient.Utils
         }
 
 
-        public static T Remove<T>(this System.Enum type, T value)
+        public static T Remove<T>(Enum type, T value)
         {
             try
             {

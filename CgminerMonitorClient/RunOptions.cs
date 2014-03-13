@@ -11,7 +11,7 @@
 
         public void SetConfigFileName(string configFileName)
         {
-            if (!string.IsNullOrWhiteSpace(configFileName))
+            if (!string.IsNullOrEmpty(configFileName))
                 ConfigFileName = configFileName;
         }
     }

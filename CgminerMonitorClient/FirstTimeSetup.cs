@@ -20,7 +20,7 @@ namespace CgminerMonitorClient
             while (true)
             {
                 var probableApiKey = Console.ReadLine();
-                if (string.IsNullOrWhiteSpace(probableApiKey) || probableApiKey.Length != 32)
+                if (string.IsNullOrEmpty(probableApiKey) || probableApiKey.Length != 32)
                     Console.WriteLine("Api key should have the lenght of 32 characters. Try again.");
                 else
                 {
@@ -40,7 +40,7 @@ Press enter when you are done.");
             while (true)
             {
                 var probablePort = Console.ReadLine();
-                if (!string.IsNullOrWhiteSpace(probablePort))
+                if (!string.IsNullOrEmpty(probablePort))
                 {
                     int parsedPort;
                     if (int.TryParse(probablePort, out parsedPort))

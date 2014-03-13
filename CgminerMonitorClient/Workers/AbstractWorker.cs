@@ -17,8 +17,9 @@ namespace CgminerMonitorClient.Workers
             _client = new RetryingHttpClient();
         }
 
-        public void Start(Config config)
+        public void Start(object configObject)
         {
+            var config = (Config) configObject;
             try
             {
                 Log.Instance.DebugFormat("Starting {0} worker.", StatisticKey);

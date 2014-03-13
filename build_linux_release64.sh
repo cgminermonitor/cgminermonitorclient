@@ -5,7 +5,7 @@ rm -rf ./CgminerMonitorClient/bin/Release/NAppUpdate.Framework_x86_unix.dll
 cp ./libs/NAppUpdate.Framework_x64_unix.dll ./CgminerMonitorClient/bin/Release/NAppUpdate.Framework.dll
 
 cd "./CgminerMonitorClient/bin/Release/"
-mkbundle --deps --static -z -L ./ CgminerMonitorClient.exe Newtonsoft.Json.dll NAppUpdate.Framework.dll System.Numerics.dll OpenHardwareMonitorLib.dll -o CgminerMonitorClient_Linux --machine-config /etc/mono/4.0/machine.config
+mkbundle --deps --static -z -L ./ CgminerMonitorClient.exe Newtonsoft.Json.dll NAppUpdate.Framework.dll OpenHardwareMonitorLib.dll -o CgminerMonitorClient_Linux --machine-config /etc/mono/2.0/machine.config
 cd ./../../../
 rm -rf builded_linux
 mkdir builded_linux

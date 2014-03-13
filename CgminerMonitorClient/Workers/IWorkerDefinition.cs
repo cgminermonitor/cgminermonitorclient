@@ -2,6 +2,6 @@
 {
     public interface IWorkerDefinition
     {
-        void Start(Config config);
+        void Start(object config);
     }
 }

@@ -2,13 +2,13 @@
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
-using System.Threading.Tasks;
 using CgminerMonitorClient.CgminerMonitor.Common;
 using CgminerMonitorClient.Utils;
 using CgminerMonitorClient.Workers;
 using CgminerMonitorClient.Workers.Cgminer;
 using CgminerMonitorClient.Workers.Hardware;
 using CgminerMonitorClient.Workers.Update;
+using NDesk.Options;
 using Newtonsoft.Json;
 
 namespace CgminerMonitorClient
@@ -58,8 +58,8 @@ namespace CgminerMonitorClient
             };
             foreach (var worker in workers)
             {
-                var w = worker;
-                Task.Factory.StartNew(() => w.Start(config));
+                var thread = new Thread(worker.Start);
+                thread.Start(config);
             }
             Log.Instance.Debug("Workers started.");
         }
