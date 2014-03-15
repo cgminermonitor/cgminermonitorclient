@@ -1,6 +1,5 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using System.Net.Sockets;
+﻿using System;
+using System.Collections.Generic;
 using CgminerMonitorClient.Utils;
 using Newtonsoft.Json;
 
@@ -37,7 +36,7 @@ namespace CgminerMonitorClient.Workers.Cgminer
                     }
                     result.Add(cmd, response);
                 }
-                catch (SocketException e)
+                catch (Exception e)
                 {
                     Log.Instance.Info("Error occured while sending request to cgminer.");
                     Log.Instance.Debug("Error occured while sending request to cgminer.", e);
