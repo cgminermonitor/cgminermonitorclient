@@ -45,7 +45,7 @@ fi
 
 mkbundle --deps --static -z -L ./ CgminerMonitorClient.exe Newtonsoft.Json.dll NAppUpdate.Framework.dll OpenHardwareMonitorLib.dll -o CgminerMonitorClient_Linux --machine-config $MachineConfigFileName
 cd ./../../../
-rm -rf builded_linux/*
+rm -rf builded_linux/$RESULTFILENAME
 mkdir builded_linux
 
 cp ./CgminerMonitorClient/bin/Release/CgminerMonitorClient_Linux ./builded_linux/$RESULTFILENAME
