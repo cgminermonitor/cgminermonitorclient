@@ -27,7 +27,7 @@ namespace CgminerMonitorClient
             };
             p.Parse(args);
 
-            Log.Instance.DebugFormat("Running client: {0}", ClientMetadata.GetCurrentClientMetadata().Dump());
+            Log.Instance.InfoFormat("Running client: {0}", ClientMetadata.GetCurrentClientMetadata().Dump());
             Log.Instance.DebugFormat("Config file name: {0}", runOptions.ConfigFileName);
 
             if (!File.Exists(runOptions.ConfigFileName))
