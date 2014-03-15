@@ -69,7 +69,7 @@ Press enter when you are done.");
             var currentClinetMetadata = ClientMetadata.GetCurrentClientMetadata();
             if (currentClinetMetadata.ClientPlatform == ClientPlatform.Windows)
                 return;
-            if (currentClinetMetadata.Distro == Consts.Bamt1XDistroName)
+            if (currentClinetMetadata.Distro == Consts.Bamt1XDistroName || currentClinetMetadata.Distro == Consts.MacOsxDistroName)
                 return;
             Log.Instance.Info("\t7. Checking libc.so linking.");
             if (File.Exists("libc.so"))
@@ -131,9 +131,13 @@ Press enter when you are done.");
         /// <returns></returns>
         private static bool PermissionCheckSucceeded_NAppUpdateParams()
         {
-            var nAppUpdateParams = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "NAppUpdateProcess");
+            var applicationDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            var nAppUpdateParams = Path.Combine(applicationDataPath, "NAppUpdateProcess");
             try
             {
+                if (!Directory.Exists(applicationDataPath))
+                    Directory.CreateDirectory(applicationDataPath);
+                Thread.Sleep(25);
                 File.WriteAllText(nAppUpdateParams, "test");
                 Thread.Sleep(25);
                 File.ReadAllText(nAppUpdateParams);

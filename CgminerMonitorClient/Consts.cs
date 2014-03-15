@@ -6,6 +6,7 @@ namespace CgminerMonitorClient
     public static class Consts
     {
         public static string Bamt1XDistroName = "BAMT1.x";
+        public static string MacOsxDistroName = "MacOSX";
         public static string DefaultConfigFileName = "CgminerMonitorClient.config";
 
 #if FORDEBUGGING
