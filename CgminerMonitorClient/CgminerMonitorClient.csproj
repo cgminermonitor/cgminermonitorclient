@@ -105,14 +105,9 @@
     </Reference>
     <Reference Include="System" />
   </ItemGroup>
-  <ItemGroup Condition=" '$(OS)' == 'Windows_NT'">
+  <ItemGroup>
     <Reference Include="NAppUpdate.Framework">
-      <HintPath>..\libs\NAppUpdate.Framework_windows.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup Condition=" '$(OS)' != 'Windows_NT'">
-    <Reference Include="NAppUpdate.Framework">
-      <HintPath>..\libs\NAppUpdate.Framework_x86_unix.dll</HintPath>
+      <HintPath>..\libs\NAppUpdate.Framework.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

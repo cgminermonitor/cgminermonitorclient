@@ -69,6 +69,8 @@ Press enter when you are done.");
             var currentClinetMetadata = ClientMetadata.GetCurrentClientMetadata();
             if (currentClinetMetadata.ClientPlatform == ClientPlatform.Windows)
                 return;
+            if (currentClinetMetadata.Distro == Consts.Bamt1XDistroName)
+                return;
             Log.Instance.Info("\t7. Checking libc.so linking.");
             if (File.Exists("libc.so"))
                 Log.Instance.Info("\t\tGreat, libc.so found!");

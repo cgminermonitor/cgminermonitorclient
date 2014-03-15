@@ -29,8 +29,8 @@ namespace CgminerMonitorClient
 
         private static void ValidateLinuxBinaryName(string fileName, ClientArchitecture clientArchitecture)
         {
-            const string x86LinuxName = "CgminerMonitorClientX86Linux";
-            const string x64LinuxName = "CgminerMonitorClientX64Linux";
+            var x86LinuxName = string.IsNullOrEmpty(Consts.Distro) ? "CgminerMonitorClientX86Linux" : "CgminerMonitorClientX86" + Consts.Distro;
+            var x64LinuxName = string.IsNullOrEmpty(Consts.Distro) ? "CgminerMonitorClientX64Linux" : "CgminerMonitorClientX64" + Consts.Distro;
             switch (clientArchitecture)
             {
                 case ClientArchitecture.x64:
