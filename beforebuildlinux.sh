@@ -1,2 +1,0 @@
-#install updates
-#install zlib
