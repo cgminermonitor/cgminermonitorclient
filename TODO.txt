@@ -1,0 +1,24 @@
+Errors to fix:
+- When autoupdating:
+	BAMT1.x:
+		03/16/2014 11:47:04.02 Updates are available to client (1 total). Downloading and preparing...
+		ERROR building certificate chain: System.ArgumentException: certificate ---> System.Security.Cryptography.CryptographicException: Unsupported hash algorithm: 1.2.840.113549.1.1.11
+		  at Mono.Security.X509.X509Certificate.VerifySignature (System.Security.Cryptography.RSA rsa) [0x00000] in <filename unknown>:0 
+		  at Mono.Security.X509.X509Certificate.VerifySignature (System.Security.Cryptography.AsymmetricAlgorithm aa) [0x00000] in <filename unknown>:0 
+		  at System.Security.Cryptography.X509Certificates.X509Chain.IsSignedWith (System.Security.Cryptography.X509Certificates.X509Certificate2 signed, System.Security.Cryptography.AsymmetricAlgorithm pubkey) [0x00000] in <filename unknown>:0 
+		  at System.Security.Cryptography.X509Certificates.X509Chain.Process (Int32 n) [0x00000] in <filename unknown>:0 
+		  at System.Security.Cryptography.X509Certificates.X509Chain.ValidateChain (X509ChainStatusFlags flag) [0x00000] in <filename unknown>:0 
+		  at System.Security.Cryptography.X509Certificates.X509Chain.Build (System.Security.Cryptography.X509Certificates.X509Certificate2 certificate) [0x00000] in <filename unknown>:0 
+		  --- End of inner exception stack trace ---
+		  at System.Security.Cryptography.X509Certificates.X509Chain.Build (System.Security.Cryptography.X509Certificates.X509Certificate2 certificate) [0x00000] in <filename unknown>:0 
+		  at System.Net.ServicePointManager+ChainValidationHelper.ValidateChain (Mono.Security.X509.X509CertificateCollection certs) [0x00000] in <filename unknown>:0 
+		Please, report this problem to the Mono team
+	Mac OS X:
+		03/16/2014 04:43:49.51 Updates are ready to install. Installing.
+		03/16/2014 04:43:49.52 Error while trying to install software updates.
+		03/16/2014 04:43:49.52 Exception:
+		System.ArgumentException: path string must not be an empty string or whitespace string
+		  at System.IO.Directory.SetCurrentDirectory (System.String path) [0x00000] in <filename unknown>:0 
+		  at System.Environment.set_CurrentDirectory (System.String value) [0x00000] in <filename unknown>:0 
+		  at NAppUpdate.Framework.UpdateManager.ApplyUpdates (Boolean relaunchApplication, Boolean updaterDoLogging, Boolean updaterShowConsole) [0x00000] in <filename unknown>:0 
+		  at CgminerMonitorClient.Workers.Update.UpdateWorker.OnPrepareUpdatesCompleted (NAppUpdate.Framework.UpdateManager updateManager) [0x00000] in <filename unknown>:0 
