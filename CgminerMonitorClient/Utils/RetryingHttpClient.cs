@@ -15,10 +15,9 @@ namespace CgminerMonitorClient.Utils
                 Log.Instance.DebugFormat("Making {0}st/nd/th request.", i + 1);
                 try
                 {
-                    using (var client = new NotShittyWebClient())
+                    using (var client = new NotShittyWebClient(Consts.RequestTimeoutInMiliseconds))
                     {
                         client.Headers.Add("Content-Type", "application/json");
-                        client.Timeout = Consts.RequestTimeoutInMiliseconds;
                         Log.Instance.DebugFormat("About to hit '{0}' url.", Consts.StatisticsUrl);
                         var result = client.UploadString(new Uri(Consts.StatisticsUrl),
                             JsonConvert.SerializeObject(message));

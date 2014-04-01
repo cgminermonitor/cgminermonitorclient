@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
@@ -22,7 +23,8 @@ namespace CgminerMonitorClient
             var p = new OptionSet
             {
                 {"h|?|help", v => ShowHelp()},
-                {"v|verbose|d|debug", v => Log.Instance.ToggleLevel(Log.Level.Verbose)},
+                {"t|T|troubleshoot", v => TroubleshootingMode()},
+                {"v|verbose|d|debug", v => SetLoggingToVerbose()},
                 {"configFile=", runOptions.SetConfigFileName},
             };
             p.Parse(args);
@@ -45,6 +47,20 @@ namespace CgminerMonitorClient
 
 // ReSharper disable FunctionNeverReturns //yeah it returns - in updater with Environment.Exit(0)
         }
+
+        private static void SetLoggingToVerbose()
+        {
+            Log.Instance.ToggleLevel(Log.Level.Verbose);
+        }
+
+        private static void TroubleshootingMode()
+        {
+            SetLoggingToVerbose();
+            var troubleshooter = new Troubleshooter();
+            troubleshooter.Execute();
+            Environment.Exit(0);
+        }
+
 // ReSharper restore FunctionNeverReturns
 
         private static void StartWorkers(Config config)
@@ -75,6 +91,7 @@ namespace CgminerMonitorClient
         private static void ShowHelp()
         {
             Log.Instance.Info("h|?|help - show this message");
+            Log.Instance.Info("t|T|troubleshoot - troubleshooting communication problems");
             Log.Instance.Info("v|verbose|d|debug - show detailed activity");
             Log.Instance.Info("configFile - specify config file name instead of default one");
         }

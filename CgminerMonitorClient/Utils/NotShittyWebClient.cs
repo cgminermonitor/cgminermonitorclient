@@ -8,11 +8,6 @@ namespace CgminerMonitorClient.Utils
         //time in milliseconds
         private int _timeout;
 
-        public NotShittyWebClient()
-        {
-            _timeout = 60000;
-        }
-
         public NotShittyWebClient(int timeout)
         {
             _timeout = timeout;

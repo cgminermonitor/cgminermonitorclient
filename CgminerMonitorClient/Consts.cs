@@ -9,8 +9,11 @@ namespace CgminerMonitorClient
         public static string MacOsxDistroName = "MacOSX";
         public static string DefaultConfigFileName = "CgminerMonitorClient.config";
 
+        public static string TroubleshooterResponse = "CgminerMonitor";
+
 #if FORDEBUGGING
         public static string StatisticsUrl = "http://127.0.0.1:81/Statistics/";
+        public static string TroubleshooterUrl = "http://127.0.0.1:81/Troubleshooter/";
         public static int RequestTimeoutInMiliseconds = (int)TimeSpan.FromDays(1).TotalMilliseconds;
         public static string ClientUpdateTemplateUrl = "http://127.0.0.1:81/ClientUpdates/{0}/{1}/{2}/{3}";
         public static TimeSpan FirstUpdateCheckSleepTime = TimeSpan.FromSeconds(3);
@@ -18,6 +21,7 @@ namespace CgminerMonitorClient
 #endif
 #if FORRELEASE
         public static string StatisticsUrl = "http://api.cgminermonitor.com/Statistics/";
+        public static string TroubleshooterUrl = "http://api.cgminermonitor.com/Troubleshooter/";
         public static int RequestTimeoutInMiliseconds = (int)TimeSpan.FromSeconds(3).TotalMilliseconds;
         public static string ClientUpdateTemplateUrl = "http://api.cgminermonitor.com/ClientUpdates/{0}/{1}/{2}/{3}";
         public static TimeSpan FirstUpdateCheckSleepTime = TimeSpan.FromSeconds(30);
