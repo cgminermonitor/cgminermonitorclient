@@ -8,7 +8,7 @@ namespace CgminerMonitorClient.Workers.Cgminer
     public class CgminerWorker : AbstractWorker
     {
         //read-only commands: "devs", "version", "config", "summary", "pools" 
-        private static readonly List<string> StatCommandsList = new List<string> { "coin", "devs", "pools", "version" };
+        private static readonly List<string> StatCommandsList = new List<string> { "coin", "devs", "pools", "summary", "version" };
 
         public CgminerWorker(string statisticsKey) : base(statisticsKey)
         {
