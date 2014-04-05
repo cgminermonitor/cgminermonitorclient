@@ -2,6 +2,7 @@
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using CgminerMonitorClient.Utils;
 
 namespace CgminerMonitorClient.Workers.Cgminer
 {
@@ -14,14 +15,17 @@ namespace CgminerMonitorClient.Workers.Cgminer
             socketPermission.Demand();
             var ipAddress = IPAddress.Parse("127.0.0.1");
             var remoteEndIp = new IPEndPoint(ipAddress, port);
-
             using (var socket = new Socket(remoteEndIp.AddressFamily, SocketType.Stream, ProtocolType.Tcp))
             {
                 socket.NoDelay = false;
                 socket.SendTimeout = (int)TimeSpan.FromSeconds(20).TotalMilliseconds;
                 socket.ReceiveTimeout = (int)TimeSpan.FromSeconds(20).TotalMilliseconds;
+
+                Log.Instance.DebugFormat("Connecting to {0}", remoteEndIp);
                 socket.Connect(remoteEndIp);
                 var bytesSent = Encoding.UTF8.GetBytes(message);
+
+                Log.Instance.Debug("Sending message...");
                 socket.Send(bytesSent);
                 int bytesRead;
                 var resultSb = new StringBuilder();
@@ -31,9 +35,22 @@ namespace CgminerMonitorClient.Workers.Cgminer
                     resultSb.Append(Encoding.UTF8.GetString(bytesReceived, 0, bytesRead));
                 }
                 while (bytesRead > 0);
+                Log.Instance.Debug("Received response.");
 
-                socket.Shutdown(SocketShutdown.Both);
-                socket.Close();
+                try
+                {
+                    Log.Instance.Debug("Calling socket.Shutdown.");
+                    socket.Shutdown(SocketShutdown.Both);
+                    Log.Instance.Debug("Calling socket.Close.");
+                    socket.Close();
+                }
+                catch (SocketException)
+                {
+                    if (Consts.Distro != Consts.MacOsxDistroName)
+                        throw;
+                    Log.Instance.Debug("Closing socket failed. This is bug in Mono on MAC OSX. Continuing...");
+                }
+
                 return resultSb.ToString();
             }
         }
