@@ -5,6 +5,7 @@ namespace CgminerMonitorClient
 {
     public static class Consts
     {
+        public static string Pimp1XDistroName = "PiMP1.x";
         public static string Bamt1XDistroName = "BAMT1.x";
         public static string MacOsxDistroName = "MacOSX";
         public static string DefaultConfigFileName = "CgminerMonitorClient.config";
@@ -32,6 +33,8 @@ namespace CgminerMonitorClient
         public static string Distro = "test";
 #elif BAMT1x
         public static string Distro = "BAMT1.x";
+#elif PiMP1x
+        public static string Distro = "PiMP1.x";
 #elif MacOSX
         public static string Distro = "MacOSX";
 #elif NORMAL
