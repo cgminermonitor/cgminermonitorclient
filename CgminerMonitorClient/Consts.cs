@@ -23,7 +23,7 @@ namespace CgminerMonitorClient
 #if FORRELEASE
         public static string StatisticsUrl = "http://api.cgminermonitor.com/Statistics/";
         public static string TroubleshooterUrl = "http://api.cgminermonitor.com/Troubleshooter/";
-        public static int RequestTimeoutInMiliseconds = (int)TimeSpan.FromSeconds(3).TotalMilliseconds;
+        public static int RequestTimeoutInMiliseconds = (int)(TimeSpan.FromSeconds(3).TotalMilliseconds + TimeSpan.FromMilliseconds(500).TotalMilliseconds);
         public static string ClientUpdateTemplateUrl = "http://api.cgminermonitor.com/ClientUpdates/{0}/{1}/{2}/{3}";
         public static TimeSpan FirstUpdateCheckSleepTime = TimeSpan.FromSeconds(30);
         public static TimeSpan NormalUpdateCheckSleepTime = TimeSpan.FromHours(3);
