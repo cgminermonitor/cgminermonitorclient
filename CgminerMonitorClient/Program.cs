@@ -94,6 +94,7 @@ namespace CgminerMonitorClient
             Log.Instance.Info("t|T|troubleshoot - troubleshooting communication problems");
             Log.Instance.Info("v|verbose|d|debug - show detailed activity");
             Log.Instance.Info("configFile - specify config file name instead of default one");
+            Environment.Exit(0);
         }
     }
 }
