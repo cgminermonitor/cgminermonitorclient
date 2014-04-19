@@ -1,10 +1,10 @@
 ﻿using System;
-using System.Net;
 using System.Threading;
 using CgminerMonitorClient.CgminerMonitor.Common;
+using CgminerMonitorClient.Utils;
 using Newtonsoft.Json;
 
-namespace CgminerMonitorClient.Utils
+namespace CgminerMonitorClient.PostMakers
 {
     public class RetryingHttpClient
     {

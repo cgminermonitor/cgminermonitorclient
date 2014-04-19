@@ -121,6 +121,10 @@
     <Compile Include="Consts.cs" />
     <Compile Include="CurrentProcessFileNameValidator.cs" />
     <Compile Include="FirstTimeSetup.cs" />
+    <Compile Include="PostMakers\NotShittyWebClient.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="PostMakers\RetryingHttpClient.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RunOptions.cs" />
@@ -128,12 +132,8 @@
     <Compile Include="Utils\EnumExtensions.cs" />
     <Compile Include="Utils\ITuple.cs" />
     <Compile Include="Utils\Log.cs" />
-    <Compile Include="Utils\NotShittyWebClient.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="Utils\Options.cs" />
     <Compile Include="Utils\PlatformCheck.cs" />
-    <Compile Include="Utils\RetryingHttpClient.cs" />
     <Compile Include="Utils\Tuple.cs" />
     <Compile Include="Utils\VersionUtil.cs" />
     <Compile Include="Workers\Cgminer\CgminerWorker.cs" />
@@ -148,6 +148,7 @@
   <ItemGroup>
     <None Include="app.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -2,6 +2,7 @@
 using System.IO;
 using System.Net;
 using System.Net.NetworkInformation;
+using CgminerMonitorClient.PostMakers;
 using CgminerMonitorClient.Utils;
 
 namespace CgminerMonitorClient

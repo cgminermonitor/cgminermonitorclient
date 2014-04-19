@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using CgminerMonitorClient.CgminerMonitor.Common;
+using CgminerMonitorClient.PostMakers;
 using CgminerMonitorClient.Utils;
 
 namespace CgminerMonitorClient.Workers

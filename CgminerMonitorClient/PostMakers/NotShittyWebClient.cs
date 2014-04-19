@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net;
 
-namespace CgminerMonitorClient.Utils
+namespace CgminerMonitorClient.PostMakers
 {
     public class NotShittyWebClient : WebClient
     {
