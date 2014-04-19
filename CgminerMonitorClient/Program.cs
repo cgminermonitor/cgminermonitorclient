@@ -48,6 +48,8 @@ namespace CgminerMonitorClient
 // ReSharper disable FunctionNeverReturns //yeah it returns - in updater with Environment.Exit(0)
         }
 
+// ReSharper restore FunctionNeverReturns
+
         private static void SetLoggingToVerbose()
         {
             Log.Instance.ToggleLevel(Log.Level.Verbose);
@@ -61,7 +63,6 @@ namespace CgminerMonitorClient
             Environment.Exit(0);
         }
 
-// ReSharper restore FunctionNeverReturns
 
         private static void StartWorkers(Config config)
         {
@@ -69,9 +70,10 @@ namespace CgminerMonitorClient
             var workers = new List<IWorkerDefinition>
             {
                 new HardwareWorker("StatHardware"),
-                new CgminerWorker("StatCgminer"),
-                new UpdateWorker()
+                new CgminerWorker("StatCgminer")
             };
+            if (Consts.Distro != Consts.CustomDistroName)
+                workers.Add(new UpdateWorker());
             foreach (var worker in workers)
             {
                 var thread = new Thread(worker.Start);
