@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Net;
 using System.Threading;
 using CgminerMonitorClient.CgminerMonitor.Common;
 using CgminerMonitorClient.Utils;
@@ -37,7 +38,9 @@ namespace CgminerMonitorClient
             var config = ReadConfig(runOptions.ConfigFileName);
 
             Log.Instance.InfoFormat("Started process id: {0}.", Process.GetCurrentProcess().Id);
+
             new CurrentProcessFileNameValidator().Validate();
+            PipesWarmup();
             StartWorkers(config);
 
             while (true)
@@ -47,8 +50,24 @@ namespace CgminerMonitorClient
 
 // ReSharper disable FunctionNeverReturns //yeah it returns - in updater with Environment.Exit(0)
         }
-
 // ReSharper restore FunctionNeverReturns
+
+        /// <summary>
+        /// access the pipes for the first time (google suggest that this may remove timeout issue in some cases)
+        /// </summary>
+        private static void PipesWarmup()
+        {
+            try
+            {
+                Log.Instance.Debug("Accessing ServicePointManager.DefaultConnectionLimit.");
+                int tmp = ServicePointManager.DefaultConnectionLimit;
+                Log.Instance.Debug("Accessing ServicePointManager.DefaultConnectionLimit done.");
+            }
+            catch (Exception e)
+            {
+                Log.Instance.Info("Error occured while accessing ServicePointManager.DefaultConnectionLimit.", e);
+            }
+        }
 
         private static void SetLoggingToVerbose()
         {
