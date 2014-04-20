@@ -121,9 +121,13 @@
     <Compile Include="Consts.cs" />
     <Compile Include="CurrentProcessFileNameValidator.cs" />
     <Compile Include="FirstTimeSetup.cs" />
+    <Compile Include="PostMakers\CurlPostHttpClient.cs" />
+    <Compile Include="PostMakers\IPostMaker.cs" />
     <Compile Include="PostMakers\NotShittyWebClient.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="PostMakers\PostMakerFactory.cs" />
+    <Compile Include="PostMakers\PostMakerType.cs" />
     <Compile Include="PostMakers\RetryingHttpClient.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

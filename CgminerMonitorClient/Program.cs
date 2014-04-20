@@ -26,6 +26,7 @@ namespace CgminerMonitorClient
                 {"h|?|help", v => ShowHelp()},
                 {"t|T|troubleshoot", v => TroubleshootingMode()},
                 {"v|verbose|d|debug", v => SetLoggingToVerbose()},
+                {"c|curl", v => runOptions.SetUseCurl()},
                 {"configFile=", runOptions.SetConfigFileName},
             };
             p.Parse(args);
@@ -36,6 +37,7 @@ namespace CgminerMonitorClient
             if (!File.Exists(runOptions.ConfigFileName))
                 new FirstTimeSetup().Execute(runOptions.ConfigFileName);
             var config = ReadConfig(runOptions.ConfigFileName);
+            config.RunOptions = runOptions;
 
             Log.Instance.InfoFormat("Started process id: {0}.", Process.GetCurrentProcess().Id);
 
@@ -114,6 +116,7 @@ namespace CgminerMonitorClient
             Log.Instance.Info("h|?|help - show this message");
             Log.Instance.Info("t|T|troubleshoot - troubleshooting communication problems");
             Log.Instance.Info("v|verbose|d|debug - show detailed activity");
+            Log.Instance.Info("c|curl - use curl to perform POST requests, DO NOT use this, unless you are always getting mysterious timeouts [Only under Linux & requires curl]");
             Log.Instance.Info("configFile - specify config file name instead of default one");
             Environment.Exit(0);
         }

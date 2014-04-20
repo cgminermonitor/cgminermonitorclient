@@ -14,11 +14,14 @@ namespace CgminerMonitorClient
             Log.Instance.Info("Starting Troubleshooter...");
             SafelyExecute(PingGoogle);
             SafelyExecute(MakeGet);
-            SafelyExecute(MakePost);
+            SafelyExecute(MakeWebClientPost);
+            if (!PlatformCheck.AreWeRunningUnderWindows())
+                SafelyExecute(MakeCurlPost);
             Log.Instance.Info("That's all.");
         }
 
         private delegate void Method();
+        private delegate bool Func(PostMakerType postMakerType);
 
         private static void SafelyExecute(Method action)
         {
@@ -32,13 +35,23 @@ namespace CgminerMonitorClient
             }
         }
 
-        private static void MakePost()
+        private static void MakeCurlPost()
         {
-            Log.Instance.Info("Testing POST request...");
-            if (TestPostRequest())
-                Log.Instance.Info("[OK] Can send POST requests to CgminerMonitor cloud service.");
+            MakeGenericPost(DoubleTestPost, "curl", PostMakerType.Curl);
+        }
+
+        private static void MakeWebClientPost()
+        {
+            MakeGenericPost(DoubleTestPost, "WebClient", PostMakerType.WebClient);
+        }
+
+        private static void MakeGenericPost(Func testPostFunction, string postClientName, PostMakerType postMakerType)
+        {
+            Log.Instance.InfoFormat("Testing POST request using {0}...", postClientName);
+            if (testPostFunction(postMakerType))
+                Log.Instance.InfoFormat("[OK] Can send POST requests using {0} to CgminerMonitor cloud service.", postClientName);
             else
-                Log.Instance.Info("[FAIL] Can send POST requests to CgminerMonitor cloud service.");
+                Log.Instance.InfoFormat("[FAIL] Can send POST requests using {0} to CgminerMonitor cloud service.", postClientName);
         }
 
         private static void MakeGet()
@@ -59,25 +72,30 @@ namespace CgminerMonitorClient
                 Log.Instance.Info("[FAIL] Pinging google.");
         }
 
-        private static bool TestPostRequest()
+        private static bool DoubleTestPost(PostMakerType postMakerType)
+        {
+            return DoubleTestPostRequestGeneric(MakePostRequest, postMakerType);
+        }
+
+        private static bool DoubleTestPostRequestGeneric(Func testPostFunction, PostMakerType postMakerType)
         {
             try
             {
-                return MakePostRequest(); //for unknown reason, first request may fail
+                return testPostFunction(postMakerType); //for unknown reason, first request may fail
             }
             // ReSharper disable EmptyGeneralCatchClause
             catch (Exception)
             // ReSharper restore EmptyGeneralCatchClause
             {
             }
-            return MakePostRequest();
+            return testPostFunction(postMakerType);
         }
 
-        private static bool MakePostRequest()
+        private static bool MakePostRequest(PostMakerType postMakerType)
         {
-            using (var client = new NotShittyWebClient(Consts.RequestTimeoutInMiliseconds))
+            using (var client = PostMakerFactory.GetPostMaker(postMakerType, Consts.RequestTimeoutInMiliseconds))
             {
-                client.Headers.Add("Content-Type", "application/json");
+                client.SetContentTypeHeader("application/json");
                 var sentGuid = Guid.NewGuid().ToString("N");
                 var result = client.UploadString(new Uri(Consts.TroubleshooterUrl), "\"" + sentGuid + "\"");
                 Log.Instance.InfoFormat("Response is: '{0}'", result);

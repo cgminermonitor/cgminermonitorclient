@@ -3,7 +3,7 @@ using System.Net;
 
 namespace CgminerMonitorClient.PostMakers
 {
-    public class NotShittyWebClient : WebClient
+    public class NotShittyWebClient : WebClient, IPostMaker
     {
         //time in milliseconds
         private int _timeout;
@@ -25,6 +25,11 @@ namespace CgminerMonitorClient.PostMakers
             if (result != null)
                 result.Timeout = _timeout;
             return result;
+        }
+
+        public void SetContentTypeHeader(string type)
+        {
+            Headers.Add("Content-Type", "application/json");
         }
     }
 }

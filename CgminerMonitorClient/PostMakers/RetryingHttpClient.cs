@@ -8,16 +8,16 @@ namespace CgminerMonitorClient.PostMakers
 {
     public class RetryingHttpClient
     {
-        public StatisticsResultMessage MakePost(object message)
+        public StatisticsResultMessage MakePost(object message, PostMakerType postMakerType)
         {
             for (int i = 0; i < Consts.HttpClientRetries; i++)
             {
                 Log.Instance.DebugFormat("Making {0}st/nd/th request.", i + 1);
                 try
                 {
-                    using (var client = new NotShittyWebClient(Consts.RequestTimeoutInMiliseconds))
+                    using (var client = PostMakerFactory.GetPostMaker(postMakerType, Consts.RequestTimeoutInMiliseconds))
                     {
-                        client.Headers.Add("Content-Type", "application/json");
+                        client.SetContentTypeHeader("application/json");
                         Log.Instance.DebugFormat("About to hit '{0}' url.", Consts.StatisticsUrl);
                         var result = client.UploadString(new Uri(Consts.StatisticsUrl),
                             JsonConvert.SerializeObject(message));
