@@ -5,7 +5,7 @@ This is a client for http://cgminermonitor.com/ site.
 
 Client documentation
 --------------------
-* [Config file](docs/config.md)
+* [Config file](doc/config.md)
 
 Dependencies
 ------------
