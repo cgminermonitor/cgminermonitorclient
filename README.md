@@ -3,6 +3,10 @@ Cgminer Monitor
 
 This is a client for http://cgminermonitor.com/ site.
 
+Client documentation
+--------------------
+* [Config file](docs/config.md)
+
 Dependencies
 ------------
 * On Windows client needs .NET Framework 4.0.
