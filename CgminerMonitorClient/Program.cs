@@ -9,6 +9,7 @@ using CgminerMonitorClient.Utils;
 using CgminerMonitorClient.Workers;
 using CgminerMonitorClient.Workers.Cgminer;
 using CgminerMonitorClient.Workers.Hardware;
+using CgminerMonitorClient.Workers.UpdateCheck;
 using NDesk.Options;
 using Newtonsoft.Json;
 
@@ -90,7 +91,8 @@ namespace CgminerMonitorClient
             var workers = new List<IWorkerDefinition>
             {
                 new HardwareWorker("StatHardware"),
-                new CgminerWorker("StatCgminer")
+                new CgminerWorker("StatCgminer"),
+                new UpdateCheckWorker(),
             };
             foreach (var worker in workers)
             {

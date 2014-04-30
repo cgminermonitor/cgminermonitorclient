@@ -142,6 +142,7 @@
     <Compile Include="Workers\Hardware\HardwareWorker.cs" />
     <Compile Include="Workers\Hardware\UpdateVisitor.cs" />
     <Compile Include="Workers\IWorkerDefinition.cs" />
+    <Compile Include="Workers\UpdateCheck\UpdateCheckWorker.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
