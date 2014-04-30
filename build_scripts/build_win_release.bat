@@ -2,21 +2,11 @@ SET PATH=%PATH%;"C:\Program Files (x86)\Mono-2.10.9\bin"
 SET ScriptDir=%CD%
 cd .\..\
 
-REM build NAppUpdateMono
-cd .\NAppUpdateMono\buildScripts
-call build_win_release.bat
-cd .\..\..\
-SET NAppUpdateLib=".\libs\NAppUpdate.Framework.dll"
-IF EXIST %NAppUpdateLib% del /F %NAppUpdateLib%
-IF EXIST %NAppUpdateLib% exit 1
-copy ".\NAppUpdateMono\bin_mono_compilant\NAppUpdate.Framework.dll" %NAppUpdateLib%
-IF NOT EXIST %NAppUpdateLib% exit 1
-
 REM build CgminerMonitorClient
 rmdir /S /Q "CgminerMonitorClient/bin/Release"
 call xbuild /p:Configuration=Release /t:rebuild /p:DefineConstants="NORMAL TRACE FORRELEASE"
 cd ".\CgminerMonitorClient\bin\Release\"
-.\..\..\..\ilmerge.2.13.0307\ilmerge.exe /out:CgminerMonitorClient_Windows.exe CgminerMonitorClient.exe Newtonsoft.Json.dll NAppUpdate.Framework.dll OpenHardwareMonitorLib.dll
+.\..\..\..\ilmerge.2.13.0307\ilmerge.exe /out:CgminerMonitorClient_Windows.exe CgminerMonitorClient.exe Newtonsoft.Json.dll OpenHardwareMonitorLib.dll
 cd .\..\..\..\
 rmdir /S /Q "builded_windows"
 mkdir builded_windows

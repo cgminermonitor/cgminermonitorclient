@@ -106,11 +106,6 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="NAppUpdate.Framework">
-      <HintPath>..\libs\NAppUpdate.Framework.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="CgminerMonitor.Common\ClientEnums.cs" />
     <Compile Include="CgminerMonitor.Common\ClientMetadata.cs" />
     <Compile Include="CgminerMonitor.Common\ErrorCodes.cs" />
@@ -147,7 +142,6 @@
     <Compile Include="Workers\Hardware\HardwareWorker.cs" />
     <Compile Include="Workers\Hardware\UpdateVisitor.cs" />
     <Compile Include="Workers\IWorkerDefinition.cs" />
-    <Compile Include="Workers\Update\UpdateWorker.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

@@ -8,7 +8,6 @@ namespace CgminerMonitorClient
         public static string Pimp1XDistroName = "PiMP1.x";
         public static string Bamt1XDistroName = "BAMT1.x";
         public static string MacOsxDistroName = "MacOSX";
-        public static string CustomDistroName = "Custom";
 
         public static string DefaultConfigFileName = "CgminerMonitorClient.config";
 

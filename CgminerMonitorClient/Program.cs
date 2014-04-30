@@ -9,7 +9,6 @@ using CgminerMonitorClient.Utils;
 using CgminerMonitorClient.Workers;
 using CgminerMonitorClient.Workers.Cgminer;
 using CgminerMonitorClient.Workers.Hardware;
-using CgminerMonitorClient.Workers.Update;
 using NDesk.Options;
 using Newtonsoft.Json;
 
@@ -93,8 +92,6 @@ namespace CgminerMonitorClient
                 new HardwareWorker("StatHardware"),
                 new CgminerWorker("StatCgminer")
             };
-            if (Consts.Distro != Consts.CustomDistroName)
-                workers.Add(new UpdateWorker());
             foreach (var worker in workers)
             {
                 var thread = new Thread(worker.Start);
