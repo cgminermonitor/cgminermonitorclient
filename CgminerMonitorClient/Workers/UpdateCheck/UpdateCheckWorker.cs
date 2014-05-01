@@ -25,7 +25,7 @@ namespace CgminerMonitorClient.Workers.UpdateCheck
                 {
                     Log.Instance.DebugFormat("Sleeping {0}h before updates check.", Consts.NormalUpdateCheckSleepTime.TotalHours);
                     Thread.Sleep(Consts.NormalUpdateCheckSleepTime);
-                    Log.Instance.Info("Updates check.");
+                    Log.Instance.Debug("Updates check.");
                     CheckForUpdates();
                 }
             }
@@ -58,6 +58,8 @@ namespace CgminerMonitorClient.Workers.UpdateCheck
             }
             if (!string.IsNullOrEmpty(latestVersion) && !string.Equals(latestVersion, currentClientMetadata.ClientVersion, StringComparison.Ordinal))
                 Log.Instance.InfoFormat("You are running {0} version, whereas {1} is the latest. Please consider updating the client.", currentClientMetadata.ClientVersion, latestVersion);
+            else
+                Log.Instance.Debug("You have the latest version of CgminerMonitorClient.");
         }
     }
 }
