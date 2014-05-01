@@ -28,6 +28,7 @@ namespace CgminerMonitorClient
                 {"v|verbose|d|debug", v => SetLoggingToVerbose()},
                 {"c|curl", v => runOptions.SetUseCurl()},
                 {"configFile=", runOptions.SetConfigFileName},
+                {"dumpFile=", runOptions.SetDumpFileName},
             };
             p.Parse(args);
 
@@ -117,6 +118,7 @@ namespace CgminerMonitorClient
             Log.Instance.Info("v|verbose|d|debug - show detailed activity");
             Log.Instance.Info("c|curl - use curl to perform POST requests, DO NOT use this, unless you are always getting mysterious timeouts [Only under Linux & requires curl]");
             Log.Instance.Info("configFile - specify config file name instead of default one");
+            Log.Instance.Info("dumpFile - save cgminer stats in a dump file (sometimes it is needed to diagnose the problem)");
             Environment.Exit(0);
         }
     }

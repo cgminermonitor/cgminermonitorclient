@@ -8,7 +8,7 @@ namespace CgminerMonitorClient
 {
     internal class CurrentProcessFileNameValidator
     {
-        private const string WarningTemplate = "WARNING!!! It is highly recommended to leave oryginal '{0}' executable name (due to future autoupdate problems). Your current executable name is '{1}'.";
+        private const string WarningTemplate = "WARNING!!! It is highly recommended to leave original '{0}' executable name (due to future autoupdate problems). Your current executable name is '{1}'.";
 
         public void Validate()
         {

@@ -6,14 +6,16 @@ namespace CgminerMonitorClient
 {
     public class RunOptions
     {
+        public string ConfigFileName { get; private set; }
+
+        public string DumpFileName { get; private set; }
+
         private bool _useCurl;
 
         public RunOptions()
         {
             ConfigFileName = Consts.DefaultConfigFileName;
         }
-
-        public string ConfigFileName { get; private set; }
 
         public PostMakerType PostMakerType
         {
@@ -34,6 +36,11 @@ namespace CgminerMonitorClient
         {
             if (!string.IsNullOrEmpty(configFileName))
                 ConfigFileName = configFileName;
+        }
+
+        public void SetDumpFileName(string dumpFileName)
+        {
+            DumpFileName = dumpFileName;
         }
     }
 }

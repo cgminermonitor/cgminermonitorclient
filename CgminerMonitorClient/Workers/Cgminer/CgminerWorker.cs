@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using CgminerMonitorClient.Utils;
 using Newtonsoft.Json;
 
@@ -9,6 +10,7 @@ namespace CgminerMonitorClient.Workers.Cgminer
     {
         //read-only commands: "devs", "version", "config", "summary", "pools" 
         private static readonly List<string> StatCommandsList = new List<string> { "coin", "devs", "pools", "summary", "version" };
+        private bool _dumpPerformed;
 
         public CgminerWorker(string statisticsKey) : base(statisticsKey)
         {
@@ -44,7 +46,28 @@ namespace CgminerMonitorClient.Workers.Cgminer
                 }
             }
             var stats = JsonConvert.SerializeObject(result);
+            MakeDumpIfNeeded(config, stats);
             return stats;
+        }
+
+        private void MakeDumpIfNeeded(Config config, string stats)
+        {
+            if (_dumpPerformed)
+                return;
+            var dumpFileName = config.RunOptions.DumpFileName;
+            if (string.IsNullOrEmpty(dumpFileName))
+                return;
+            
+            try
+            {
+                File.WriteAllText(dumpFileName, stats);
+                Log.Instance.InfoFormat("Dump was saved in: {0}.", dumpFileName);
+                _dumpPerformed = true;
+            }
+            catch (Exception e)
+            {
+                Log.Instance.Info("Could not make dump file.", e);
+            }
         }
 
         protected override void PreInit(Config config)
