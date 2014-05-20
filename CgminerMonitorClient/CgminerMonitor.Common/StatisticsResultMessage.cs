@@ -11,7 +11,7 @@ namespace CgminerMonitorClient.CgminerMonitor.Common
         [JsonProperty("ec")]
         public string ErrorCode { get; set; }
         [JsonProperty("c")]
-        public string Commands { get; set; }
+        public WorkerCommand Command { get; set; }
         [JsonProperty("ss")]
         public int SleepSeconds { get; set; }
     }

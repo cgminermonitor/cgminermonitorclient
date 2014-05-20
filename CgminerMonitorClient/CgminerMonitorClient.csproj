@@ -112,6 +112,8 @@
     <Compile Include="CgminerMonitor.Common\IAmAveragableData.cs" />
     <Compile Include="CgminerMonitor.Common\StatisticsInsertMessage.cs" />
     <Compile Include="CgminerMonitor.Common\StatisticsResultMessage.cs" />
+    <Compile Include="CgminerMonitor.Common\WorkerCommand.cs" />
+    <Compile Include="CgminerMonitor.Common\WorkerCommandHandlerKeys.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="Consts.cs" />
     <Compile Include="FirstTimeSetup.cs" />
@@ -137,6 +139,11 @@
     <Compile Include="Workers\Cgminer\CgminerWorker.cs" />
     <Compile Include="Workers\Cgminer\CommandSender.cs" />
     <Compile Include="Workers\AbstractWorker.cs" />
+    <Compile Include="Workers\Control\CgminerConfigCommandHandler.cs" />
+    <Compile Include="Workers\Control\CgminerControlCommandHandler.cs" />
+    <Compile Include="Workers\Control\ControlWorker.cs" />
+    <Compile Include="Workers\Control\CgminerPowerCommandHandler.cs" />
+    <Compile Include="Workers\Control\WorkerPowerCommandHandler.cs" />
     <Compile Include="Workers\Hardware\HardwareModel.cs" />
     <Compile Include="Workers\Hardware\HardwareWorker.cs" />
     <Compile Include="Workers\Hardware\UpdateVisitor.cs" />
