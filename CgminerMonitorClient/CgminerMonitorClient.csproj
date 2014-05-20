@@ -114,7 +114,6 @@
     <Compile Include="CgminerMonitor.Common\StatisticsResultMessage.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="Consts.cs" />
-    <Compile Include="CurrentProcessFileNameValidator.cs" />
     <Compile Include="FirstTimeSetup.cs" />
     <Compile Include="PostMakers\CurlPostHttpClient.cs" />
     <Compile Include="PostMakers\IPostMaker.cs" />

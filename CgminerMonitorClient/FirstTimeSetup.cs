@@ -96,12 +96,11 @@ Press enter when you are done.");
 
         public bool PermissionCheckSucceeded()
         {
-            return PermissionCheckSucceeded_CurrentDirectory() &&
-                   PermissionCheckSucceeded_NAppUpdateParams();
+            return PermissionCheckSucceeded_CurrentDirectory();
         }
 
         /// <summary>
-        ///     Current directory - updates, running, config
+        ///     Current directory - running, config
         /// </summary>
         /// <returns></returns>
         private static bool PermissionCheckSucceeded_CurrentDirectory()
@@ -120,33 +119,6 @@ Press enter when you are done.");
                 Log.Instance.InfoFormat(
                     "\t\tERROR!!! Cannot write or read in '{0}'. This is necessary and running the client will FAIL!",
                     Environment.CurrentDirectory);
-                return false;
-            }
-            return true;
-        }
-
-        /// <summary>
-        ///     SpecialFolder.ApplicationData - updates, fallback temp folder/passing params
-        /// </summary>
-        /// <returns></returns>
-        private static bool PermissionCheckSucceeded_NAppUpdateParams()
-        {
-            var applicationDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            var nAppUpdateParams = Path.Combine(applicationDataPath, "NAppUpdateProcess");
-            try
-            {
-                if (!Directory.Exists(applicationDataPath))
-                    Directory.CreateDirectory(applicationDataPath);
-                Thread.Sleep(25);
-                File.WriteAllText(nAppUpdateParams, "test");
-                Thread.Sleep(25);
-                File.ReadAllText(nAppUpdateParams);
-                Thread.Sleep(25);
-                File.Delete(nAppUpdateParams);
-            }
-            catch (Exception)
-            {
-                Log.Instance.InfoFormat("\t\tERROR!!! Cannot write or read file '{0}'. This is necessary and autoupdating the client will FAIL!", nAppUpdateParams);
                 return false;
             }
             return true;
