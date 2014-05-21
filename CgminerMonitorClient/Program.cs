@@ -8,6 +8,7 @@ using CgminerMonitorClient.CgminerMonitor.Common;
 using CgminerMonitorClient.Utils;
 using CgminerMonitorClient.Workers;
 using CgminerMonitorClient.Workers.Cgminer;
+using CgminerMonitorClient.Workers.Control;
 using CgminerMonitorClient.Workers.Hardware;
 using CgminerMonitorClient.Workers.UpdateCheck;
 using NDesk.Options;
@@ -92,6 +93,7 @@ namespace CgminerMonitorClient
             {
                 new HardwareWorker("StatHardware"),
                 new CgminerWorker("StatCgminer"),
+                new ControlWorker("Control"),
                 new UpdateCheckWorker(),
             };
             foreach (var worker in workers)

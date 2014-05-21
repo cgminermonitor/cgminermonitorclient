@@ -12,7 +12,7 @@ namespace CgminerMonitorClient.Workers.Control
         protected readonly string StatisticKey;
         private readonly RetryingHttpClient _client;
 
-        protected ControlWorker(string statisticsKey)
+        public ControlWorker(string statisticsKey)
         {
             StatisticKey = statisticsKey;
             _client = new RetryingHttpClient();
@@ -25,6 +25,7 @@ namespace CgminerMonitorClient.Workers.Control
             {
                 Log.Instance.DebugFormat("Starting {0} worker.", StatisticKey);
                 Log.Instance.DebugFormat("Setting up handlers.");
+                var accessRightsCommandValidator = new ControlAccessRightsValidator(config);
                 var commandKeyToCommandHandler = BootstrapCommandHandlers(config);
                 string previousCommandResult = null;
 
@@ -43,7 +44,7 @@ namespace CgminerMonitorClient.Workers.Control
                         if (result.Command != null)
                         {
                             Log.Instance.DebugFormat("Retreived '{0}' command.", result.Command);
-                            previousCommandResult = ExecuteCommand(commandKeyToCommandHandler, result.Command);
+                            previousCommandResult = ExecuteCommand(commandKeyToCommandHandler, accessRightsCommandValidator, result.Command);
                         }
                         Log.Instance.DebugFormat("Sleeping for {0} seconds.", result.SleepSeconds);
                         Thread.Sleep(TimeSpan.FromSeconds(result.SleepSeconds));
@@ -90,15 +91,24 @@ namespace CgminerMonitorClient.Workers.Control
             };
         }
 
-        private static string ExecuteCommand(IDictionary<string, ExecuteCommandFunc> commandKeyToCommandHandler, WorkerCommand command)
+        private static string ExecuteCommand(IDictionary<string, ExecuteCommandFunc> commandKeyToCommandHandler, ControlAccessRightsValidator accessRightsCommandValidator, WorkerCommand command)
         {
             if (commandKeyToCommandHandler.ContainsKey(command.HandlerKey))
             {
                 try
                 {
-                    var executeCommandFunc = commandKeyToCommandHandler[command.HandlerKey];
-                    var result = executeCommandFunc(command);
-                    return result;
+                    var canExecuteCommand = accessRightsCommandValidator.CanExecute(command);
+                    if (canExecuteCommand)
+                    {
+                        Log.Instance.DebugFormat("Executing '{0}' command is allowed.", command);
+                        var executeCommandFunc = commandKeyToCommandHandler[command.HandlerKey];
+                        var result = executeCommandFunc(command);
+                        return result;
+                    }
+
+                    var response = string.Format("Client does not allow to execute '{0}' command.", command);
+                    Log.Instance.Info(response);
+                    return response;
                 }
                 catch (Exception e)
                 {
