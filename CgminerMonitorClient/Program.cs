@@ -105,7 +105,7 @@ namespace CgminerMonitorClient
         private static Config ReadConfig(string configFileName)
         {
             Log.Instance.Debug("Reading config");
-            var config = JsonConvert.DeserializeObject<Config>(File.ReadAllText(configFileName));
+            var config = Config.Read(configFileName);
             Log.Instance.Debug("Config read.");
             return config;
         }

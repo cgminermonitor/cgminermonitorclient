@@ -1,10 +1,8 @@
 ﻿using System;
 using System.IO;
-using System.Text;
 using System.Threading;
 using CgminerMonitorClient.CgminerMonitor.Common;
 using CgminerMonitorClient.Utils;
-using Newtonsoft.Json;
 
 namespace CgminerMonitorClient
 {
@@ -12,7 +10,11 @@ namespace CgminerMonitorClient
     {
         public void Execute(string configFileName)
         {
-            var config = new Config();
+            var config = new Config
+            {
+                ClientVersion = VersionUtil.GetAsString()
+            };
+
             Log.Instance.Info("First time setup!");
             Log.Instance.Info("\t1. Register on site cgminermonitor.com");
             Log.Instance.Info("\t2. Add a new worker under worker page");
@@ -21,7 +23,7 @@ namespace CgminerMonitorClient
             {
                 var probableApiKey = Console.ReadLine();
                 if (string.IsNullOrEmpty(probableApiKey) || probableApiKey.Length != 32)
-                    Console.WriteLine("Api key should have the lenght of 32 characters. Try again.");
+                    Log.Instance.Info("Api key should have the lenght of 32 characters. Try again.");
                 else
                 {
                     config.WorkerApiKey = probableApiKey;
@@ -48,7 +50,7 @@ Press enter when you are done.");
                         port = parsedPort;
                         break;
                     }
-                    Console.WriteLine("Enter a port number or leave the line empty.");
+                    Log.Instance.Info("Enter a port number or leave the line empty.");
                 }
                 else
                 {
@@ -59,9 +61,86 @@ Press enter when you are done.");
             Log.Instance.Info("\t6. Checking read-write permissions.");
             if (PermissionCheckSucceeded())
                 Log.Instance.Info("\t\tAll is good.");
+            ConfigureRemoteMinerControl(config);
             CheckLibcSoLinking();
             Log.Instance.Info("Thats all. Starting up!");
-            File.WriteAllText(configFileName, JsonConvert.SerializeObject(config, Formatting.Indented), Encoding.UTF8);
+            config.Save(configFileName);
+        }
+
+        private static void ConfigureRemoteMinerControl(Config config)
+        {
+            Log.Instance.Info("\t7. Remote miner control. (Answer with 'y' or 'n')");
+            Log.Instance.Info("\t\t NOTE: if you have security concerns please read http://cgminermonitor.com/Faq.");
+            var currentClientMetadata = ClientMetadata.GetCurrentClientMetadata();
+            config.AllowWorkerPowerControl = GetYnAnswerToQuestion("\t\t Do you want to be able to reboot or shutdown your worker from the website?");
+            config.AllowCgminerPowerControl = GetYnAnswerToQuestion("\t\t Do you want to be able to start, stop or reboot cgminer from the website?");
+            if (config.AllowCgminerPowerControl)
+            {
+                string startCgminerExample;
+                switch (currentClientMetadata.ClientPlatform)
+                {
+                    case ClientPlatform.Linux:
+                        startCgminerExample = "screen -S miner -dm /absolute/path/to/cgminer --some-params";
+                        break;
+                    case ClientPlatform.Windows:
+                        startCgminerExample = @"C:\absolute\path\to\cgminer.exe --some-params";
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+                config.CgminerStartCmd = GetStringAnswerToQuestion("\t\t\t How to start cgminer? Example: " + startCgminerExample);
+            }
+            config.AllowCgminerControl = GetYnAnswerToQuestion("\t\t Do you want to be able to control cgminer (switch pools etc.) from the website?");
+            config.AllowCgminerConfigReadingAndWriting = GetYnAnswerToQuestion("\t\t Do you want to be able to read/write cgminer config from the website?");
+            if (config.AllowCgminerConfigReadingAndWriting)
+            {
+                string cgminerConfigFileLocationExample;
+                switch (currentClientMetadata.ClientPlatform)
+                {
+                    case ClientPlatform.Linux:
+                        cgminerConfigFileLocationExample = "/absolute/path/to/cgminer.config";
+                        break;
+                    case ClientPlatform.Windows:
+                        cgminerConfigFileLocationExample = @"C:\absolute\path\to\cgminer.config";
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+                config.CgminerConfigFileLocation = GetStringAnswerToQuestion("\t\t\t Where is your cgminer config file? Example: " + cgminerConfigFileLocationExample);
+            }
+        }
+
+        private static string GetStringAnswerToQuestion(string question)
+        {
+            Log.Instance.Info(question);
+            while (true)
+            {
+                var probableAnswer = Console.ReadLine();
+                if (string.IsNullOrEmpty(probableAnswer))
+                    Console.WriteLine("You should answer with something. Try again.");
+                else
+                {
+                    return probableAnswer;
+                }
+            }
+        }
+
+        private static bool GetYnAnswerToQuestion(string question)
+        {
+            Log.Instance.Info(question);
+            while (true)
+            {
+                var probableAnswer = Console.ReadLine();
+                if (string.IsNullOrEmpty(probableAnswer) || (string.CompareOrdinal("y", probableAnswer) != 0 && string.CompareOrdinal("n", probableAnswer) != 0))
+                    Console.WriteLine("You should answer with 'y' or 'n'. Try again.");
+                else
+                {
+                    if (string.CompareOrdinal("y", probableAnswer) == 0)
+                        return true;
+                    if (string.CompareOrdinal("n", probableAnswer) == 0)
+                        return false;
+                }
+            }
         }
 
         private static void CheckLibcSoLinking()
@@ -71,7 +150,7 @@ Press enter when you are done.");
                 return;
             if (currentClinetMetadata.Distro == Consts.Bamt1XDistroName || currentClinetMetadata.Distro == Consts.MacOsxDistroName)
                 return;
-            Log.Instance.Info("\t7. Checking libc.so linking.");
+            Log.Instance.Info("\t8. Checking libc.so linking.");
             if (File.Exists("libc.so"))
                 Log.Instance.Info("\t\tGreat, libc.so found!");
             else
