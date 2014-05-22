@@ -20,7 +20,7 @@ namespace CgminerMonitorClient.Workers.Control
 
                 { WorkerCommandHandlerKeys.StartCgminer, () => config.AllowCgminerPowerControl},
                 { WorkerCommandHandlerKeys.StopCgminer, () => config.AllowCgminerPowerControl},
-                { WorkerCommandHandlerKeys.RebootCgminer, () => config.AllowCgminerPowerControl},
+                { WorkerCommandHandlerKeys.RestartCgminer, () => config.AllowCgminerPowerControl},
 
                 { WorkerCommandHandlerKeys.Reboot, () => config.AllowWorkerPowerControl},
                 { WorkerCommandHandlerKeys.Shutdown, () => config.AllowWorkerPowerControl}

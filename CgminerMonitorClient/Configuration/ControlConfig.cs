@@ -15,7 +15,30 @@ namespace CgminerMonitorClient.Configuration
 
         public string CgminerConfigFileLocation { get; set; }
 
-        public void GenerateCgminerKillCmdBasedOnCgminerProcessName()
+        public string WorkerRebootCmd { get; set; }
+        public string WorkerShutdownCmd { get; set; }
+
+        public void Bootstrap()
+        {
+            GenerateCgminerKillCmdBasedOnCgminerProcessName();
+            GenerateWorkerPowerCommands();
+        }
+
+        private void GenerateWorkerPowerCommands()
+        {
+            if (PlatformCheck.AreWeRunningUnderWindows())
+            {
+                WorkerRebootCmd = "shutdown /r /t 10";
+                WorkerShutdownCmd = "shutdown /s /t 10";
+            }
+            else
+            {
+                WorkerRebootCmd = "shutdown -r 10";
+                WorkerShutdownCmd = "shutdown -p 10";
+            }
+        }
+
+        private void GenerateCgminerKillCmdBasedOnCgminerProcessName()
         {
             if (PlatformCheck.AreWeRunningUnderWindows())
                 CgminerKillCmd = string.Format(@"taskkill /F /IM ""{0}""", CgminerProcessName);

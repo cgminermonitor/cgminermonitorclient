@@ -7,7 +7,7 @@
         public const string ReadCgminerConfig = "readCgminerConfig";
         public const string WriteCgminerConfig = "writeCgminerConfig";
 
-        public const string RebootCgminer = "rebootCgminer";
+        public const string RestartCgminer = "restartCgminer";
         public const string StartCgminer = "startCgminer";
         public const string StopCgminer = "stopCgminer";
 

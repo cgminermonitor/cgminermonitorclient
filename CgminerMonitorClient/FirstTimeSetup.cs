@@ -74,7 +74,7 @@ Press enter when you are done.");
             Log.Instance.Info("\t\t NOTE: if you have security concerns please read http://cgminermonitor.com/Faq.");
             var currentClientMetadata = ClientMetadata.GetCurrentClientMetadata();
             config.AllowWorkerPowerControl = GetYnAnswerToQuestion("\t\t Do you want to be able to reboot or shutdown your worker from the website?");
-            config.AllowCgminerPowerControl = GetYnAnswerToQuestion("\t\t Do you want to be able to start, stop or reboot cgminer from the website?");
+            config.AllowCgminerPowerControl = GetYnAnswerToQuestion("\t\t Do you want to be able to start, stop or restart cgminer from the website?");
             if (config.AllowCgminerPowerControl)
             {
                 string startCgminerExample;
@@ -92,7 +92,6 @@ Press enter when you are done.");
                 config.CgminerStartCmd = GetStringAnswerToQuestion("\t\t\t How to start cgminer? Example: " + startCgminerExample);
                 var exampleProcessName = PlatformCheck.AreWeRunningUnderWindows() ? "cgminer.exe" : "cgminer";
                 config.CgminerProcessName = GetStringAnswerToQuestion("\t\t\t What is cgminer process name? Example: " + exampleProcessName + " (may be different when using e.g. vertminer)");
-                config.GenerateCgminerKillCmdBasedOnCgminerProcessName();
             }
             config.AllowCgminerControl = GetYnAnswerToQuestion("\t\t Do you want to be able to control cgminer (switch pools etc.) from the website?");
             config.AllowCgminerConfigReadingAndWriting = GetYnAnswerToQuestion("\t\t Do you want to be able to read/write cgminer config from the website?");
@@ -112,6 +111,7 @@ Press enter when you are done.");
                 }
                 config.CgminerConfigFileLocation = GetStringAnswerToQuestion("\t\t\t Where is your cgminer config file? Example: " + cgminerConfigFileLocationExample);
             }
+            config.Bootstrap();
         }
 
         private static string GetStringAnswerToQuestion(string question)

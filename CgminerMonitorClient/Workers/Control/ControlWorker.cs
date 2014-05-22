@@ -85,7 +85,7 @@ namespace CgminerMonitorClient.Workers.Control
 
                 { WorkerCommandHandlerKeys.StartCgminer, cgminerPowerCommandHandler.Start},
                 { WorkerCommandHandlerKeys.StopCgminer, cgminerPowerCommandHandler.Stop},
-                { WorkerCommandHandlerKeys.RebootCgminer, cgminerPowerCommandHandler.Reboot},
+                { WorkerCommandHandlerKeys.RestartCgminer, cgminerPowerCommandHandler.Reboot},
 
                 { WorkerCommandHandlerKeys.Reboot, workerPowerCommandHandler.Reboot},
                 { WorkerCommandHandlerKeys.Shutdown, workerPowerCommandHandler.Shutdown}
