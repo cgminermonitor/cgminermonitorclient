@@ -13,16 +13,16 @@ namespace CgminerMonitorClient.Workers.Control
             _controlConfig = controlConfig;
         }
 
-        public string Reboot(WorkerCommand command)
+        public WorkerCommandResponse Reboot(WorkerCommand command)
         {
             Log.Instance.InfoFormat("Executing reboot worker command.");
-            return SimpleProcessExecutor.Fire(_controlConfig.WorkerRebootCmd);
+            return WorkerCommandResponse.FromProcessExecutionResult(command.Id, SimpleProcessExecutor.Fire(_controlConfig.WorkerRebootCmd));
         }
 
-        public string Shutdown(WorkerCommand command)
+        public WorkerCommandResponse Shutdown(WorkerCommand command)
         {
             Log.Instance.InfoFormat("Executing shutdown worker command.");
-            return SimpleProcessExecutor.Fire(_controlConfig.WorkerShutdownCmd);
+            return WorkerCommandResponse.FromProcessExecutionResult(command.Id, SimpleProcessExecutor.Fire(_controlConfig.WorkerShutdownCmd));
         }
     }
 }

@@ -12,12 +12,12 @@ namespace CgminerMonitorClient.Workers.Control
             _controlConfig = controlConfig;
         }
 
-        public string Read(WorkerCommand command)
+        public WorkerCommandResponse Read(WorkerCommand command)
         {
             throw new System.NotImplementedException();
         }
 
-        public string Write(WorkerCommand command)
+        public WorkerCommandResponse Write(WorkerCommand command)
         {
             throw new System.NotImplementedException();
         }

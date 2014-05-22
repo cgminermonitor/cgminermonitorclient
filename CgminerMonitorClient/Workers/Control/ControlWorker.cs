@@ -28,31 +28,35 @@ namespace CgminerMonitorClient.Workers.Control
                 Log.Instance.DebugFormat("Setting up handlers.");
                 var accessRightsCommandValidator = new ControlAccessRightsValidator(config.ControlOptions);
                 var commandKeyToCommandHandler = BootstrapCommandHandlers(config);
-                string previousCommandResult = null;
 
                 while (true)
                 {
                     var message = new StatisticsInsertMessage(config.WorkerApiKey, StatisticKey);
-                    if (!string.IsNullOrEmpty(previousCommandResult))
-                        Log.Instance.DebugFormat("Sending previous command result: {0}", previousCommandResult);
-                    message.Stats = previousCommandResult;
+                    var pulledCommand = _client.MakePost(message, config.RunOptions.PostMakerType);
 
-                    var result = _client.MakePost(message, config.RunOptions.PostMakerType);
-
-                    if (result.Success)
+                    if (pulledCommand.Success)
                     {
-                        Log.Instance.DebugFormat("{0} worker push/pull completed successfully.", StatisticKey);
-                        if (result.Command != null)
+                        if (pulledCommand.Command != null)
                         {
-                            Log.Instance.DebugFormat("Retreived '{0}' command.", result.Command);
-                            previousCommandResult = ExecuteCommand(commandKeyToCommandHandler, accessRightsCommandValidator, result.Command);
+                            Log.Instance.DebugFormat("Retrieved '{0}' command.", pulledCommand.Command);
+                            var previousCommandResult = ExecuteCommand(commandKeyToCommandHandler, accessRightsCommandValidator, pulledCommand.Command);
+                            Log.Instance.DebugFormat("Sending '{0}' command result.", pulledCommand.Command);
+                            var responseMessage = new StatisticsInsertMessage(config.WorkerApiKey, StatisticKey)
+                            {
+                                WorkerCommandResponse = previousCommandResult
+                            };
+                            var responseInsertionStatus = _client.MakePost(responseMessage, config.RunOptions.PostMakerType);
+                            if (responseInsertionStatus.Success)
+                                Log.Instance.Info("Command response sent successfully.");
+                            else
+                                Log.Instance.InfoFormat("Error occured while sending command response. Error code: {1}, Message: {2}", responseInsertionStatus.ErrorCode, responseInsertionStatus.ErrorMessage);
                         }
-                        Log.Instance.DebugFormat("Sleeping for {0} seconds.", result.SleepSeconds);
-                        Thread.Sleep(TimeSpan.FromSeconds(result.SleepSeconds));
+                        Log.Instance.DebugFormat("Sleeping for {0} seconds.", pulledCommand.SleepSeconds);
+                        Thread.Sleep(TimeSpan.FromSeconds(pulledCommand.SleepSeconds));
                     }
                     else
                     {
-                        Log.Instance.InfoFormat("Error occured while sending {0} data. Error code: {1}, Message: {2}", StatisticKey, result.ErrorCode, result.ErrorMessage);
+                        Log.Instance.InfoFormat("Error occured while sending {0} data. Error code: {1}, Message: {2}", StatisticKey, pulledCommand.ErrorCode, pulledCommand.ErrorMessage);
                         Thread.Sleep(TimeSpan.FromSeconds(3));
                     }
                 }
@@ -67,7 +71,7 @@ namespace CgminerMonitorClient.Workers.Control
             }
         }
 
-        private delegate string ExecuteCommandFunc(WorkerCommand command);
+        private delegate WorkerCommandResponse ExecuteCommandFunc(WorkerCommand command);
 
         private static Dictionary<string, ExecuteCommandFunc> BootstrapCommandHandlers(Config config)
         {
@@ -93,7 +97,7 @@ namespace CgminerMonitorClient.Workers.Control
             };
         }
 
-        private static string ExecuteCommand(IDictionary<string, ExecuteCommandFunc> commandKeyToCommandHandler, ControlAccessRightsValidator accessRightsCommandValidator, WorkerCommand command)
+        private static WorkerCommandResponse ExecuteCommand(IDictionary<string, ExecuteCommandFunc> commandKeyToCommandHandler, ControlAccessRightsValidator accessRightsCommandValidator, WorkerCommand command)
         {
             if (commandKeyToCommandHandler.ContainsKey(command.HandlerKey))
             {
@@ -109,19 +113,19 @@ namespace CgminerMonitorClient.Workers.Control
                         return result;
                     }
 
-                    var response = string.Format("Client does not allow to execute '{0}' command.", command);
-                    Log.Instance.Info(response);
+                    var response = WorkerCommandResponse.NotAllowed(command.Id);
+                    Log.Instance.Info(string.Format("You do not allow to execute '{0}' command.", command));
                     return response;
                 }
                 catch (Exception e)
                 {
                     Log.Instance.Info(string.Format("Executing '{0}' command resulted in error.", command), e);
-                    return e.ToString();
+                    return WorkerCommandResponse.Failure(command.Id, e.ToString());
                 }
             }
 
             Log.Instance.InfoFormat("Could not find handler for '{0}' command. Do you have the latest client version?", command.HandlerKey);
-            return string.Format("Could not find handler for '{0}' command.", command.HandlerKey);
+            return WorkerCommandResponse.Unknown(command.Id);
         }
     }
 }

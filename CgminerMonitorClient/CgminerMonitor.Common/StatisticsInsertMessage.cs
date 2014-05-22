@@ -4,6 +4,7 @@
     {
         public string ApiKey { get; private set; }
         public ClientMetadata ClientMetadata { get; private set; }
+        public WorkerCommandResponse WorkerCommandResponse { get; set; }
         public string Stats { get; set; }
         public string StatsKey { get; private set; }
         public string StatTime { get; set; }
