@@ -27,7 +27,7 @@ namespace CgminerMonitorClient.Workers.Cgminer
             var result = new Dictionary<string, string>();
             foreach (var cmd in StatCommandsList)
             {
-                var cgminerCommand = string.Format(@"{{ ""command"": ""{0}"", ""devs"": ""{1}"" }}", cmd, string.Empty);
+                var cgminerCommand = string.Format(Consts.CgminerCommandTemplate, cmd, string.Empty);
                 Log.Instance.DebugFormat("Sending {0} to cgminer.", cgminerCommand);
                 try
                 {

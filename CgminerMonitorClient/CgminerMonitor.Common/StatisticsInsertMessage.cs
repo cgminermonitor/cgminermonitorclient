@@ -1,9 +1,12 @@
-﻿namespace CgminerMonitorClient.CgminerMonitor.Common
+﻿using Newtonsoft.Json;
+
+namespace CgminerMonitorClient.CgminerMonitor.Common
 {
     public class StatisticsInsertMessage
     {
         public string ApiKey { get; private set; }
         public ClientMetadata ClientMetadata { get; private set; }
+        [JsonProperty("wcr")]
         public WorkerCommandResponse WorkerCommandResponse { get; set; }
         public string Stats { get; set; }
         public string StatsKey { get; private set; }

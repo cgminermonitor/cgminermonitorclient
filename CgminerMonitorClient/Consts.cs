@@ -53,5 +53,6 @@ namespace CgminerMonitorClient
         public static int HttpClientRetries = 5;
 
         public static string SuccessCommandPrefix = "Success! ";
+        public static string CgminerCommandTemplate = @"{{ ""command"": ""{0}"", ""devs"": ""{1}"" }}";
     }
 }
