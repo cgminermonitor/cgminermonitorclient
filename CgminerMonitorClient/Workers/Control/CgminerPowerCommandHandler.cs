@@ -5,11 +5,11 @@ namespace CgminerMonitorClient.Workers.Control
 {
     public class CgminerPowerCommandHandler
     {
-        private readonly Config _config;
+        private readonly ControlConfig _controlConfig;
 
-        public CgminerPowerCommandHandler(Config config)
+        public CgminerPowerCommandHandler(ControlConfig controlConfig)
         {
-            _config = config;
+            _controlConfig = controlConfig;
         }
 
         public string Reboot(WorkerCommand command)

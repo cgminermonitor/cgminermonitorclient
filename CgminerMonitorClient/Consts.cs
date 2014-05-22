@@ -51,5 +51,7 @@ namespace CgminerMonitorClient
         }
 
         public static int HttpClientRetries = 5;
+
+        public static string SuccessCommandPrefix = "Success! ";
     }
 }

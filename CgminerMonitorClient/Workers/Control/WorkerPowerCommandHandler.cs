@@ -1,25 +1,28 @@
 ﻿using CgminerMonitorClient.CgminerMonitor.Common;
 using CgminerMonitorClient.Configuration;
+using CgminerMonitorClient.Utils;
 
 namespace CgminerMonitorClient.Workers.Control
 {
     public class WorkerPowerCommandHandler
     {
-        private readonly Config _config;
+        private readonly ControlConfig _controlConfig;
 
-        public WorkerPowerCommandHandler(Config config)
+        public WorkerPowerCommandHandler(ControlConfig controlConfig)
         {
-            _config = config;
+            _controlConfig = controlConfig;
         }
 
         public string Reboot(WorkerCommand command)
         {
-            throw new System.NotImplementedException();
+            Log.Instance.InfoFormat("Executing reboot worker command.");
+            return SimpleProcessExecutor.Fire(_controlConfig.WorkerRebootCmd);
         }
 
         public string Shutdown(WorkerCommand command)
         {
-            throw new System.NotImplementedException();
+            Log.Instance.InfoFormat("Executing shutdown worker command.");
+            return SimpleProcessExecutor.Fire(_controlConfig.WorkerShutdownCmd);
         }
     }
 }

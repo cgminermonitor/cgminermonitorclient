@@ -5,11 +5,11 @@ namespace CgminerMonitorClient.Workers.Control
 {
     public class CgminerConfigCommandHandler
     {
-        private readonly Config _config;
+        private readonly ControlConfig _controlConfig;
 
-        public CgminerConfigCommandHandler(Config config)
+        public CgminerConfigCommandHandler(ControlConfig controlConfig)
         {
-            _config = config;
+            _controlConfig = controlConfig;
         }
 
         public string Read(WorkerCommand command)

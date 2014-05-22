@@ -130,11 +130,13 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Troubleshooter.cs" />
+    <Compile Include="Utils\CommandLineParser.cs" />
     <Compile Include="Utils\EnumExtensions.cs" />
     <Compile Include="Utils\ITuple.cs" />
     <Compile Include="Utils\Log.cs" />
     <Compile Include="Utils\Options.cs" />
     <Compile Include="Utils\PlatformCheck.cs" />
+    <Compile Include="Utils\SimpleProcessExecutor.cs" />
     <Compile Include="Utils\Tuple.cs" />
     <Compile Include="Utils\VersionUtil.cs" />
     <Compile Include="Workers\Cgminer\CgminerWorker.cs" />

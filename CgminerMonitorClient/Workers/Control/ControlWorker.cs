@@ -71,9 +71,10 @@ namespace CgminerMonitorClient.Workers.Control
 
         private static Dictionary<string, ExecuteCommandFunc> BootstrapCommandHandlers(Config config)
         {
-            var workerPowerCommandHandler = new WorkerPowerCommandHandler(config);
-            var cgminerPowerCommandHandler = new CgminerPowerCommandHandler(config);
-            var cgminerConfigCommandHandler = new CgminerConfigCommandHandler(config);
+            var controlConfig = config.ControlOptions;
+            var workerPowerCommandHandler = new WorkerPowerCommandHandler(controlConfig);
+            var cgminerPowerCommandHandler = new CgminerPowerCommandHandler(controlConfig);
+            var cgminerConfigCommandHandler = new CgminerConfigCommandHandler(controlConfig);
             var cgminerControlCommandHandler = new CgminerControlCommandHandler(config);
 
             return new Dictionary<string, ExecuteCommandFunc>
@@ -104,6 +105,7 @@ namespace CgminerMonitorClient.Workers.Control
                         Log.Instance.DebugFormat("Executing '{0}' command is allowed.", command);
                         var executeCommandFunc = commandKeyToCommandHandler[command.HandlerKey];
                         var result = executeCommandFunc(command);
+                        Log.Instance.Debug(result);
                         return result;
                     }
 
