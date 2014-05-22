@@ -5,6 +5,7 @@ using System.IO;
 using System.Net;
 using System.Threading;
 using CgminerMonitorClient.CgminerMonitor.Common;
+using CgminerMonitorClient.Configuration;
 using CgminerMonitorClient.Utils;
 using CgminerMonitorClient.Workers;
 using CgminerMonitorClient.Workers.Cgminer;
@@ -12,7 +13,6 @@ using CgminerMonitorClient.Workers.Control;
 using CgminerMonitorClient.Workers.Hardware;
 using CgminerMonitorClient.Workers.UpdateCheck;
 using NDesk.Options;
-using Newtonsoft.Json;
 
 namespace CgminerMonitorClient
 {

@@ -1,4 +1,5 @@
 ﻿using CgminerMonitorClient.CgminerMonitor.Common;
+using CgminerMonitorClient.Configuration;
 
 namespace CgminerMonitorClient.Workers.Control
 {

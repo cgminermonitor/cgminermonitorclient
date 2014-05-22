@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using CgminerMonitorClient.CgminerMonitor.Common;
+using CgminerMonitorClient.Configuration;
 using CgminerMonitorClient.PostMakers;
 using CgminerMonitorClient.Utils;
 
@@ -25,7 +26,7 @@ namespace CgminerMonitorClient.Workers.Control
             {
                 Log.Instance.DebugFormat("Starting {0} worker.", StatisticKey);
                 Log.Instance.DebugFormat("Setting up handlers.");
-                var accessRightsCommandValidator = new ControlAccessRightsValidator(config);
+                var accessRightsCommandValidator = new ControlAccessRightsValidator(config.ControlOptions);
                 var commandKeyToCommandHandler = BootstrapCommandHandlers(config);
                 string previousCommandResult = null;
 

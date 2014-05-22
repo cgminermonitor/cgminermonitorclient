@@ -114,7 +114,9 @@
     <Compile Include="CgminerMonitor.Common\StatisticsResultMessage.cs" />
     <Compile Include="CgminerMonitor.Common\WorkerCommand.cs" />
     <Compile Include="CgminerMonitor.Common\WorkerCommandHandlerKeys.cs" />
-    <Compile Include="Config.cs" />
+    <Compile Include="Configuration\Config.cs" />
+    <Compile Include="Configuration\ControlConfig.cs" />
+    <Compile Include="Configuration\RunOptions.cs" />
     <Compile Include="Consts.cs" />
     <Compile Include="FirstTimeSetup.cs" />
     <Compile Include="PostMakers\CurlPostHttpClient.cs" />
@@ -127,7 +129,6 @@
     <Compile Include="PostMakers\RetryingHttpClient.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RunOptions.cs" />
     <Compile Include="Troubleshooter.cs" />
     <Compile Include="Utils\EnumExtensions.cs" />
     <Compile Include="Utils\ITuple.cs" />

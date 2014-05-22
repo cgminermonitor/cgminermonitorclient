@@ -3,7 +3,7 @@ using System.Text;
 using CgminerMonitorClient.Utils;
 using Newtonsoft.Json;
 
-namespace CgminerMonitorClient
+namespace CgminerMonitorClient.Configuration
 {
     public class Config
     {
@@ -12,15 +12,15 @@ namespace CgminerMonitorClient
         public int CgminerPort { get; set; }
         public string WorkerApiKey { get; set; }
 
-        public bool AllowWorkerPowerControl { get; set; }
-        public bool AllowCgminerPowerControl { get; set; }
-        public string CgminerStartCmd { get; set; }
-        public bool AllowCgminerConfigReadingAndWriting { get; set; }
-        public string CgminerConfigFileLocation { get; set; }
-        public bool AllowCgminerControl { get; set; }
+        public ControlConfig ControlOptions { get; set; }
 
         [JsonIgnore]
         public RunOptions RunOptions { get; set; }
+
+        public Config()
+        {
+            ControlOptions = new ControlConfig();
+        }
 
         public void Save(string configFileName)
         {

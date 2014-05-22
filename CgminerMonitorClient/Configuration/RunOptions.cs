@@ -2,7 +2,7 @@
 using CgminerMonitorClient.PostMakers;
 using CgminerMonitorClient.Utils;
 
-namespace CgminerMonitorClient
+namespace CgminerMonitorClient.Configuration
 {
     public class RunOptions
     {

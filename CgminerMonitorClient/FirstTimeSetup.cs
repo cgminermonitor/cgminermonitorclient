@@ -2,6 +2,7 @@
 using System.IO;
 using System.Threading;
 using CgminerMonitorClient.CgminerMonitor.Common;
+using CgminerMonitorClient.Configuration;
 using CgminerMonitorClient.Utils;
 
 namespace CgminerMonitorClient
@@ -61,13 +62,13 @@ Press enter when you are done.");
             Log.Instance.Info("\t6. Checking read-write permissions.");
             if (PermissionCheckSucceeded())
                 Log.Instance.Info("\t\tAll is good.");
-            ConfigureRemoteMinerControl(config);
+            ConfigureRemoteMinerControl(config.ControlOptions);
             CheckLibcSoLinking();
             Log.Instance.Info("Thats all. Starting up!");
             config.Save(configFileName);
         }
 
-        private static void ConfigureRemoteMinerControl(Config config)
+        private static void ConfigureRemoteMinerControl(ControlConfig config)
         {
             Log.Instance.Info("\t7. Remote miner control. (Answer with 'y' or 'n')");
             Log.Instance.Info("\t\t NOTE: if you have security concerns please read http://cgminermonitor.com/Faq.");
@@ -89,6 +90,9 @@ Press enter when you are done.");
                         throw new ArgumentOutOfRangeException();
                 }
                 config.CgminerStartCmd = GetStringAnswerToQuestion("\t\t\t How to start cgminer? Example: " + startCgminerExample);
+                var exampleProcessName = PlatformCheck.AreWeRunningUnderWindows() ? "cgminer.exe" : "cgminer";
+                config.CgminerProcessName = GetStringAnswerToQuestion("\t\t\t What is cgminer process name? Example: " + exampleProcessName + " (may be different when using e.g. vertminer)");
+                config.GenerateCgminerKillCmdBasedOnCgminerProcessName();
             }
             config.AllowCgminerControl = GetYnAnswerToQuestion("\t\t Do you want to be able to control cgminer (switch pools etc.) from the website?");
             config.AllowCgminerConfigReadingAndWriting = GetYnAnswerToQuestion("\t\t Do you want to be able to read/write cgminer config from the website?");

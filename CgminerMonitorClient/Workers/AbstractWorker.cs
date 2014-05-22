@@ -3,6 +3,7 @@ using System.Configuration;
 using System.Security.Principal;
 using System.Threading;
 using CgminerMonitorClient.CgminerMonitor.Common;
+using CgminerMonitorClient.Configuration;
 using CgminerMonitorClient.PostMakers;
 using CgminerMonitorClient.Utils;
 

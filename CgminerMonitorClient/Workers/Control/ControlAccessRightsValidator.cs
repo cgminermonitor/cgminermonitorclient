@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using CgminerMonitorClient.CgminerMonitor.Common;
+using CgminerMonitorClient.Configuration;
 
 namespace CgminerMonitorClient.Workers.Control
 {
@@ -8,7 +9,7 @@ namespace CgminerMonitorClient.Workers.Control
         private delegate bool IsCommandAllowed();
         private readonly Dictionary<string, IsCommandAllowed> _commandValidators;
 
-        private static Dictionary<string, IsCommandAllowed> BootstrapCommandValidators(Config config)
+        private static Dictionary<string, IsCommandAllowed> BootstrapCommandValidators(ControlConfig config)
         {
             return new Dictionary<string, IsCommandAllowed>
             {
@@ -26,7 +27,7 @@ namespace CgminerMonitorClient.Workers.Control
             };
         }
 
-        public ControlAccessRightsValidator(Config config)
+        public ControlAccessRightsValidator(ControlConfig config)
         {
             _commandValidators = BootstrapCommandValidators(config);
         }

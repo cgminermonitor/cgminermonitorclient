@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using CgminerMonitorClient.Configuration;
 using CgminerMonitorClient.Utils;
 using Newtonsoft.Json;
 

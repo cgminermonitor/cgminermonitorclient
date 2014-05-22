@@ -3,6 +3,7 @@ using System.IO;
 using System.Net;
 using System.Threading;
 using CgminerMonitorClient.CgminerMonitor.Common;
+using CgminerMonitorClient.Configuration;
 using CgminerMonitorClient.Utils;
 
 namespace CgminerMonitorClient.Workers.UpdateCheck
