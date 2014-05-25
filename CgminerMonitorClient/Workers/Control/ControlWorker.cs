@@ -49,7 +49,7 @@ namespace CgminerMonitorClient.Workers.Control
                             if (responseInsertionStatus.Success)
                                 Log.Instance.Info("Command response sent successfully.");
                             else
-                                Log.Instance.InfoFormat("Error occured while sending command response. Error code: {1}, Message: {2}", responseInsertionStatus.ErrorCode, responseInsertionStatus.ErrorMessage);
+                                Log.Instance.InfoFormat("Error occured while sending command response. Error code: {0}, Message: {1}", responseInsertionStatus.ErrorCode, responseInsertionStatus.ErrorMessage);
                         }
                         Log.Instance.DebugFormat("Sleeping for {0} seconds.", pulledCommand.SleepSeconds);
                         Thread.Sleep(TimeSpan.FromSeconds(pulledCommand.SleepSeconds));
