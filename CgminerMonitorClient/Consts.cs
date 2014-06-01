@@ -15,6 +15,7 @@ namespace CgminerMonitorClient
 
 #if FORDEBUGGING
         public static string StatisticsUrl = "http://127.0.0.1:81/Statistics/";
+        public static string RemoteManagementUrl = "http://127.0.0.1:81/Control/";
         public static string TroubleshooterUrl = "http://127.0.0.1:81/Troubleshooter/";
         public static int RequestTimeoutInMiliseconds = (int)TimeSpan.FromDays(1).TotalMilliseconds;
         public static string ClientUpdateCheckTemplateUrl = "http://127.0.0.1:81/ClientUpdatesCheck/{0}/{1}/{2}/{3}";
@@ -23,6 +24,7 @@ namespace CgminerMonitorClient
 #endif
 #if FORRELEASE
         public static string StatisticsUrl = "http://api.cgminermonitor.com/Statistics/";
+        public static string RemoteManagementUrl = "http://api.cgminermonitor.com/Control/";
         public static string TroubleshooterUrl = "http://api.cgminermonitor.com/Troubleshooter/";
         public static int RequestTimeoutInMiliseconds = (int)(TimeSpan.FromSeconds(3).TotalMilliseconds + TimeSpan.FromMilliseconds(500).TotalMilliseconds);
         public static string ClientUpdateCheckTemplateUrl = "http://api.cgminermonitor.com/ClientUpdatesCheck/{0}/{1}/{2}/{3}";

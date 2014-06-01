@@ -8,7 +8,7 @@ namespace CgminerMonitorClient.PostMakers
 {
     public class RetryingHttpClient
     {
-        public StatisticsResultMessage MakePost(object message, PostMakerType postMakerType)
+        public StatisticsResultMessage MakePost(object message, PostMakerType postMakerType, string url)
         {
             for (int i = 0; i < Consts.HttpClientRetries; i++)
             {
@@ -18,8 +18,8 @@ namespace CgminerMonitorClient.PostMakers
                     using (var client = PostMakerFactory.GetPostMaker(postMakerType, Consts.RequestTimeoutInMiliseconds))
                     {
                         client.SetContentTypeHeader("application/json");
-                        Log.Instance.DebugFormat("About to hit '{0}' url.", Consts.StatisticsUrl);
-                        var result = client.UploadString(new Uri(Consts.StatisticsUrl),
+                        Log.Instance.DebugFormat("About to hit '{0}' url.", url);
+                        var result = client.UploadString(new Uri(url),
                             JsonConvert.SerializeObject(message));
                         var deserialized = JsonConvert.DeserializeObject<StatisticsResultMessage>(result);
                         return deserialized;

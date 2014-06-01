@@ -54,7 +54,7 @@ namespace CgminerMonitorClient.Workers
                     }
 
                     Log.Instance.DebugFormat("Getting data for {0} worker succeeded.", StatisticKey);
-                    var result = _client.MakePost(message, config.RunOptions.PostMakerType);
+                    var result = _client.MakePost(message, config.RunOptions.PostMakerType, Consts.StatisticsUrl);
 
                     if (result.Success)
                     {

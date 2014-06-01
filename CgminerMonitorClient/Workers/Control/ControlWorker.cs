@@ -32,7 +32,7 @@ namespace CgminerMonitorClient.Workers.Control
                 while (true)
                 {
                     var message = new StatisticsInsertMessage(config.WorkerApiKey, StatisticKey);
-                    var pulledCommand = _client.MakePost(message, config.RunOptions.PostMakerType);
+                    var pulledCommand = _client.MakePost(message, config.RunOptions.PostMakerType, Consts.RemoteManagementUrl);
 
                     if (pulledCommand.Success)
                     {
@@ -45,7 +45,7 @@ namespace CgminerMonitorClient.Workers.Control
                             {
                                 WorkerCommandResponse = previousCommandResult
                             };
-                            var responseInsertionStatus = _client.MakePost(responseMessage, config.RunOptions.PostMakerType);
+                            var responseInsertionStatus = _client.MakePost(responseMessage, config.RunOptions.PostMakerType, Consts.RemoteManagementUrl);
                             if (responseInsertionStatus.Success)
                                 Log.Instance.Info("Command response sent successfully.");
                             else
