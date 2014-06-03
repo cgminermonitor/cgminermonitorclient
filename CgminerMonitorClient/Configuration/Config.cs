@@ -11,6 +11,7 @@ namespace CgminerMonitorClient.Configuration
 
         public int CgminerPort { get; set; }
         public string WorkerApiKey { get; set; }
+        public string CgminerProcessName { get; set; }
 
         public ControlConfig ControlOptions { get; set; }
 

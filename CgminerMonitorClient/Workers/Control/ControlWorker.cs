@@ -32,6 +32,8 @@ namespace CgminerMonitorClient.Workers.Control
                 while (true)
                 {
                     var message = new StatisticsInsertMessage(config.WorkerApiKey, StatisticKey);
+                    message.CgminerProcessIsRunning = CgminerPowerCommandHandler.IsCgminerProcessRunning(config.CgminerProcessName);
+
                     var pulledCommand = _client.MakePost(message, config.RunOptions.PostMakerType, Consts.RemoteManagementUrl);
 
                     if (pulledCommand.Success)

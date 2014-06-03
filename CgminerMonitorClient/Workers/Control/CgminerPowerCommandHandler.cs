@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using CgminerMonitorClient.CgminerMonitor.Common;
 using CgminerMonitorClient.Configuration;
 using CgminerMonitorClient.Utils;
@@ -7,6 +8,7 @@ namespace CgminerMonitorClient.Workers.Control
 {
     public class CgminerPowerCommandHandler
     {
+        private const string WindowsProcessNameExtension = ".exe";
         private readonly ControlConfig _controlConfig;
 
         public CgminerPowerCommandHandler(ControlConfig controlConfig)
@@ -45,6 +47,15 @@ namespace CgminerMonitorClient.Workers.Control
                 return WorkerCommandResponse.Failure(command.Id, resultOutput);
             }
             return WorkerCommandResponse.Warning(command.Id, resultOutput);
+        }
+
+        public static bool IsCgminerProcessRunning(string cgminerProcessName)
+        {
+            if (cgminerProcessName.EndsWith(WindowsProcessNameExtension))
+            {
+                cgminerProcessName = cgminerProcessName.Substring(0, cgminerProcessName.Length - WindowsProcessNameExtension.Length);
+            }
+            return Process.GetProcessesByName(cgminerProcessName).Length >= 1;
         }
     }
 }

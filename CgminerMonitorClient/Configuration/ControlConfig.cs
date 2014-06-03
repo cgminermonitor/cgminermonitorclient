@@ -11,7 +11,6 @@ namespace CgminerMonitorClient.Configuration
 
         public string CgminerStartCmd { get; set; }
         public string CgminerKillCmd { get; set; }
-        public string CgminerProcessName { get; set; }
 
         public string CgminerConfigFileLocation { get; set; }
 
@@ -21,9 +20,9 @@ namespace CgminerMonitorClient.Configuration
         public string RootPrivilegesCmd { get; set; }
         public string RootPrivilegesCmdResult { get; set; }
 
-        public void Bootstrap()
+        public void Bootstrap(string cgminerProcessName)
         {
-            GenerateCgminerKillCmdBasedOnCgminerProcessName();
+            GenerateCgminerKillCmdBasedOnCgminerProcessName(cgminerProcessName);
             GenerateWorkerPowerCommands();
         }
 
@@ -43,12 +42,12 @@ namespace CgminerMonitorClient.Configuration
             }
         }
 
-        private void GenerateCgminerKillCmdBasedOnCgminerProcessName()
+        private void GenerateCgminerKillCmdBasedOnCgminerProcessName(string cgminerProcessName)
         {
             if (PlatformCheck.AreWeRunningUnderWindows())
-                CgminerKillCmd = string.Format(@"taskkill /F /IM ""{0}""", CgminerProcessName);
+                CgminerKillCmd = string.Format(@"taskkill /F /IM ""{0}""", cgminerProcessName);
             else
-                CgminerKillCmd = string.Format(@"pkill -9 ""{0}""", CgminerProcessName);
+                CgminerKillCmd = string.Format(@"pkill -9 ""{0}""", cgminerProcessName);
         }
     }
 }
