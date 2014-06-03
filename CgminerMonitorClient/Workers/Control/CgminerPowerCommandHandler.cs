@@ -21,34 +21,38 @@ namespace CgminerMonitorClient.Workers.Control
 
         public WorkerCommandResponse Start(WorkerCommand command)
         {
-            Log.Instance.InfoFormat("Executing start cgminer command.");
-            var startCgminerExecutionResult = SimpleProcessExecutor.Fire(_controlConfig.CgminerStartCmd, true);
-            if (startCgminerExecutionResult.Success)
-            {
-                Thread.Sleep(TimeSpan.FromSeconds(5));
-                var cgminerIsRunning = IsCgminerProcessRunning(_cgminerProcessName);
-                if (cgminerIsRunning)
-                    return WorkerCommandResponse.FromProcessExecutionResult(command.Id, startCgminerExecutionResult);
-                return WorkerCommandResponse.Failure(command.Id, GetNoCgminerProcessMessage());
-            }
-            return WorkerCommandResponse.FromProcessExecutionResult(command.Id, startCgminerExecutionResult);
-        }
-
-        private string GetNoCgminerProcessMessage()
-        {
-            return string.Format("Command executed properly, however no '{0}' process was found after 5 seconds.", _cgminerProcessName);
+            return WorkerCommandResponse.FromProcessExecutionResult(command.Id, ExecuteStart());
         }
 
         public WorkerCommandResponse Stop(WorkerCommand command)
         {
-            Log.Instance.InfoFormat("Executing stop cgminer command.");
-            return WorkerCommandResponse.FromProcessExecutionResult(command.Id, SimpleProcessExecutor.Fire(_controlConfig.CgminerKillCmd, false));
+            return WorkerCommandResponse.FromProcessExecutionResult(command.Id, ExecuteStop());
         }
 
         public WorkerCommandResponse Reboot(WorkerCommand command)
         {
             Log.Instance.InfoFormat("Executing restart cgminer command.");
-            var stop = SimpleProcessExecutor.Fire(_controlConfig.CgminerKillCmd, false);
+            var stopResult = ExecuteStop();
+            var startResult = ExecuteStart();
+            var resultOutput = string.Concat("Start: ", startResult.Output, Environment.NewLine, "Stop: ", stopResult.Output);
+            if (stopResult.Success && startResult.Success)
+            {
+                return WorkerCommandResponse.Success(command.Id, resultOutput);
+            }
+            if (!stopResult.Success && !startResult.Success)
+            {
+                return WorkerCommandResponse.Failure(command.Id, resultOutput);
+            }
+            return WorkerCommandResponse.Warning(command.Id, resultOutput);
+        }
+
+        private ProcessExecutorResult ExecuteStart()
+        {
+            Log.Instance.InfoFormat("Executing start cgminer command.");
+            var cgminerIsRunningBeforeStart = IsCgminerProcessRunning(_cgminerProcessName);
+            if (cgminerIsRunningBeforeStart)
+                return ProcessExecutorResult.Failed(CgminerProcessIsAlreadyStarted);
+
             var start = SimpleProcessExecutor.Fire(_controlConfig.CgminerStartCmd, true);
             if (start.Success)
             {
@@ -57,23 +61,30 @@ namespace CgminerMonitorClient.Workers.Control
                 if (cgminerIsRunning)
                 {
                     if (string.IsNullOrEmpty(start.Output))
-                        start = ProcessExecutorResult.Succeeded(GetNoCgminerProcessMessage());
+                        start = ProcessExecutorResult.Succeeded("OK");
                 }
                 else
                 {
-                    start = ProcessExecutorResult.Failed(GetNoCgminerProcessMessage());
+                    start = ProcessExecutorResult.Failed(NoCgminerProcessAfterStartMessage);
                 }
             }
-            var resultOutput = string.Concat("Start: ", start.Output, Environment.NewLine, "Stop: ", stop.Output);
-            if (stop.Success && start.Success)
+            return start;
+        }
+
+        private ProcessExecutorResult ExecuteStop()
+        {
+            Log.Instance.InfoFormat("Executing stop cgminer command.");
+            var cgminerIsRunningBeforeStop = IsCgminerProcessRunning(_cgminerProcessName);
+            ProcessExecutorResult stopResult;
+            if (!cgminerIsRunningBeforeStop)
             {
-                return WorkerCommandResponse.Success(command.Id, resultOutput);
+                stopResult = ProcessExecutorResult.Failed(CgminerProcessIsNotRunningMessage);
             }
-            if (!stop.Success && !start.Success)
+            else
             {
-                return WorkerCommandResponse.Failure(command.Id, resultOutput);
+                stopResult = SimpleProcessExecutor.Fire(_controlConfig.CgminerKillCmd, false);
             }
-            return WorkerCommandResponse.Warning(command.Id, resultOutput);
+            return stopResult;
         }
 
         public static bool IsCgminerProcessRunning(string cgminerProcessName)
@@ -83,6 +94,27 @@ namespace CgminerMonitorClient.Workers.Control
                 cgminerProcessName = cgminerProcessName.Substring(0, cgminerProcessName.Length - WindowsProcessNameExtension.Length);
             }
             return Process.GetProcessesByName(cgminerProcessName).Length >= 1;
+        }
+
+        private string CgminerProcessIsAlreadyStarted
+        {
+            get
+            {
+                return string.Format("'{0}' process is already running. Aborted start cgminer command.", _cgminerProcessName);
+            }
+        }
+
+        private string NoCgminerProcessAfterStartMessage
+        {
+            get
+            {
+                return string.Format("Command executed properly, however no '{0}' process was found after 5 seconds.", _cgminerProcessName);
+            }
+        }
+
+        private string CgminerProcessIsNotRunningMessage
+        {
+            get { return string.Format("'{0}' process is not running. Aborted stop cgminer command.", _cgminerProcessName); }
         }
     }
 }

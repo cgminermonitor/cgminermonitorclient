@@ -90,7 +90,7 @@ Press enter when you are done.");
                         startCgminerExample = "sh -c '/absolute/path/to/mine/script.sh'";
                         break;
                     case ClientPlatform.Windows:
-                        startCgminerExample = @"cmd.exe /c C:\absolute\path\to\bash\script\run.bat --some-params, OR ";
+                        startCgminerExample = @"cmd.exe /c C:\absolute\path\to\bash\script\run.bat --some-params, OR C:\absolute\path\to\cgminer.exe";
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();
