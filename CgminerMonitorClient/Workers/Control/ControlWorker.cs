@@ -79,7 +79,7 @@ namespace CgminerMonitorClient.Workers.Control
         {
             var controlConfig = config.ControlOptions;
             var workerPowerCommandHandler = new WorkerPowerCommandHandler(controlConfig);
-            var cgminerPowerCommandHandler = new CgminerPowerCommandHandler(controlConfig);
+            var cgminerPowerCommandHandler = new CgminerPowerCommandHandler(controlConfig, config.CgminerProcessName);
             var cgminerConfigCommandHandler = new CgminerConfigCommandHandler(controlConfig);
             var cgminerControlCommandHandler = new CgminerControlCommandHandler(config);
 
