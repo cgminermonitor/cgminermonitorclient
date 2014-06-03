@@ -81,10 +81,10 @@ Press enter when you are done.");
                 switch (currentClientMetadata.ClientPlatform)
                 {
                     case ClientPlatform.Linux:
-                        startCgminerExample = "screen -S miner -dm /absolute/path/to/cgminer --some-params";
+                        startCgminerExample = "sh -c '/absolute/path/to/mine/script.sh'";
                         break;
                     case ClientPlatform.Windows:
-                        startCgminerExample = @"C:\absolute\path\to\cgminer.exe --some-params";
+                        startCgminerExample = @"cmd.exe /c C:\absolute\path\to\bash\script\run.bat --some-params, OR ";
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();

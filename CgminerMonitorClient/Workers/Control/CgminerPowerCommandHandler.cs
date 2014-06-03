@@ -16,21 +16,26 @@ namespace CgminerMonitorClient.Workers.Control
         public WorkerCommandResponse Start(WorkerCommand command)
         {
             Log.Instance.InfoFormat("Executing start cgminer command.");
-            return WorkerCommandResponse.FromProcessExecutionResult(command.Id, SimpleProcessExecutor.Fire(_controlConfig.CgminerStartCmd));
+            return WorkerCommandResponse.FromProcessExecutionResult(command.Id, SimpleProcessExecutor.Fire(_controlConfig.CgminerStartCmd, true));
         }
 
         public WorkerCommandResponse Stop(WorkerCommand command)
         {
             Log.Instance.InfoFormat("Executing stop cgminer command.");
-            return WorkerCommandResponse.FromProcessExecutionResult(command.Id, SimpleProcessExecutor.Fire(_controlConfig.CgminerKillCmd));
+            return WorkerCommandResponse.FromProcessExecutionResult(command.Id, SimpleProcessExecutor.Fire(_controlConfig.CgminerKillCmd, false));
         }
 
         public WorkerCommandResponse Reboot(WorkerCommand command)
         {
             Log.Instance.InfoFormat("Executing restart cgminer command.");
-            var stop = SimpleProcessExecutor.Fire(_controlConfig.CgminerKillCmd);
-            var start = SimpleProcessExecutor.Fire(_controlConfig.CgminerStartCmd);
-            var resultOutput = string.Concat(start.Output, Environment.NewLine, stop.Output);
+            var stop = SimpleProcessExecutor.Fire(_controlConfig.CgminerKillCmd, false);
+            var start = SimpleProcessExecutor.Fire(_controlConfig.CgminerStartCmd, true);
+            var msgStart = start.Output;
+            if (string.IsNullOrEmpty(msgStart))
+            {
+                msgStart = "OK";
+            }
+            var resultOutput = string.Concat("Start: ", msgStart, Environment.NewLine, "Stop: ", stop.Output);
             if (stop.Success && start.Success)
             {
                 return WorkerCommandResponse.Success(command.Id, resultOutput);

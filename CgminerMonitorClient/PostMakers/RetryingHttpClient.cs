@@ -27,8 +27,8 @@ namespace CgminerMonitorClient.PostMakers
                 }
                 catch (Exception e)
                 {
-                    Log.Instance.Debug("Error occured.", e);
-                    Log.Instance.Info("Error occured. Retrying.");
+                    Log.Instance.DebugFormat("Error occured (when contacting {0}){1}{2}.", url, Environment.NewLine, e);
+                    Log.Instance.InfoFormat("Error occured (when contacting {0}): {1}.", url, e.Message);
                 }
                 Thread.Sleep(2000);
             }

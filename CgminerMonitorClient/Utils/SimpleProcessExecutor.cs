@@ -5,48 +5,65 @@ namespace CgminerMonitorClient.Utils
 {
     public static class SimpleProcessExecutor
     {
-        public static ProcessExecutorResult Fire(string commandLine)
+        public static ProcessExecutorResult Fire(string commandLine, bool runAndForget)
         {
             string processName;
             string arguments;
             CommandLineParser.SplitCommandLine(commandLine, out processName, out arguments);
-            return Fire(processName, arguments);
+            return Fire(processName, arguments, runAndForget);
         }
 
-        public static ProcessExecutorResult Fire(string processName, string arguments)
+        public static ProcessExecutorResult Fire(string processName, string arguments, bool runAndForget)
         {
-            var ps = new ProcessStartInfo(processName, arguments)
-            {
-                UseShellExecute = false,
-                RedirectStandardOutput = true,
-                RedirectStandardInput = true
-            };
+            ProcessStartInfo ps;
+            if (runAndForget)
+                ps = new ProcessStartInfo(processName, arguments);
+            else
+                ps = new ProcessStartInfo(processName, arguments)
+                {
+                    UseShellExecute = false,
+                    RedirectStandardOutput = true,
+                    RedirectStandardInput = true
+                };
 
             Log.Instance.DebugFormat("Starting '{0}' with parameters '{1}'", processName, arguments);
 
             try
             {
-                using (var p = Process.Start(ps))
+                var p = Process.Start(ps);
+                try
                 {
                     if (p == null)
                         return ProcessExecutorResult.Failed(string.Format("Could not start {0} process.", processName));
 
-                    p.StandardInput.Flush();
-                    p.StandardInput.Close();
-                    var output = p.StandardOutput.ReadToEnd();
+                    string output = null;
+                    if (!runAndForget)
+                    {
+                        p.StandardInput.Flush();
+                        p.StandardInput.Close();
+                        output = p.StandardOutput.ReadToEnd();
 
-                    // waits for the process to exit
-                    // Must come *after* StandardOutput is "empty"
-                    // so that we don't deadlock because the intermediate
-                    // kernel pipe is full.
-                    p.WaitForExit();
-                    if (p.ExitCode > 0)
-                        return ProcessExecutorResult.Failed(string.Format("Invoked command returned error. Process '{0}' exited with '{1}', returning: '{2}'.",
-                            processName, p.ExitCode, output));
+                        // waits for the process to exit
+                        // Must come *after* StandardOutput is "empty"
+                        // so that we don't deadlock because the intermediate
+                        // kernel pipe is full.
+                        p.WaitForExit();
+                        if (p.ExitCode > 0)
+                        {
+                            Log.Instance.Debug("EC>0");
+                            return ProcessExecutorResult.Failed(string.Format("Invoked command returned error. Process '{0}' exited with '{1}', returning: '{2}'.",
+                                        processName, p.ExitCode, output));
+                        }
+                    }
 
                     var result = Consts.SuccessCommandPrefix + output;
                     Log.Instance.InfoFormat(result);
                     return ProcessExecutorResult.Succeeded(output);
+                }
+                finally
+                {
+                    if (p != null && !runAndForget)
+                        ((IDisposable)p).Dispose();
                 }
             }
             catch (Exception e)
@@ -58,12 +75,12 @@ namespace CgminerMonitorClient.Utils
 
     public class ProcessExecutorResult
     {
-        public string Output { get; private set; }
-        public bool Success { get; private set; }
-
         private ProcessExecutorResult()
         {
         }
+
+        public string Output { get; private set; }
+        public bool Success { get; private set; }
 
         public static ProcessExecutorResult Succeeded(string message)
         {

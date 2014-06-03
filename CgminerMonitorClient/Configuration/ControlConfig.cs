@@ -18,6 +18,9 @@ namespace CgminerMonitorClient.Configuration
         public string WorkerRebootCmd { get; set; }
         public string WorkerShutdownCmd { get; set; }
 
+        public string RootPrivilegesCmd { get; set; }
+        public string RootPrivilegesCmdResult { get; set; }
+
         public void Bootstrap()
         {
             GenerateCgminerKillCmdBasedOnCgminerProcessName();
@@ -33,8 +36,10 @@ namespace CgminerMonitorClient.Configuration
             }
             else
             {
-                WorkerRebootCmd = "shutdown -r 10";
-                WorkerShutdownCmd = "shutdown -p 10";
+                WorkerRebootCmd = "shutdown -r 1";
+                WorkerShutdownCmd = "shutdown -p 1";
+                RootPrivilegesCmd = "whoami";
+                RootPrivilegesCmdResult = "root";
             }
         }
 
