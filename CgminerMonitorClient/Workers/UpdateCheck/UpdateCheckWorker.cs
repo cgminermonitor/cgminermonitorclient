@@ -3,7 +3,6 @@ using System.IO;
 using System.Net;
 using System.Threading;
 using CgminerMonitorClient.CgminerMonitor.Common;
-using CgminerMonitorClient.Configuration;
 using CgminerMonitorClient.Utils;
 
 namespace CgminerMonitorClient.Workers.UpdateCheck
@@ -12,7 +11,6 @@ namespace CgminerMonitorClient.Workers.UpdateCheck
     {
         public void Start(object configObject)
         {
-            var config = (Config)configObject;
             try
             {
                 Log.Instance.Debug("Starting update check worker.");

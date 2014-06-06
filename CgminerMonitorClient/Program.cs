@@ -51,9 +51,8 @@ namespace CgminerMonitorClient
                 Thread.Sleep(1000);
             }
 
-// ReSharper disable FunctionNeverReturns //yeah it returns - sometimes with Environment.Exit(0)
+// ReSharper disable once FunctionNeverReturns //yeah it returns - sometimes with Environment.Exit(0)
         }
-// ReSharper restore FunctionNeverReturns
 
         /// <summary>
         /// access the pipes for the first time (google suggest that this may remove timeout issue in some cases)
@@ -63,7 +62,10 @@ namespace CgminerMonitorClient
             try
             {
                 Log.Instance.Debug("Accessing ServicePointManager.DefaultConnectionLimit.");
+#pragma warning disable 0219
+                // ReSharper disable once UnusedVariable
                 int tmp = ServicePointManager.DefaultConnectionLimit;
+#pragma warning restore 0219
                 Log.Instance.Debug("Accessing ServicePointManager.DefaultConnectionLimit done.");
             }
             catch (Exception e)
