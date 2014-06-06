@@ -33,6 +33,8 @@ namespace CgminerMonitorClient.Workers.Control
         {
             Log.Instance.InfoFormat("Executing restart cgminer command.");
             var stopResult = ExecuteStop();
+            Log.Instance.InfoFormat("Sleeping 15 seconds before trying to start cgminer.");
+            Thread.Sleep(TimeSpan.FromSeconds(15));
             var startResult = ExecuteStart();
             var resultOutput = string.Concat("Start: ", startResult.Output, Environment.NewLine, "Stop: ", stopResult.Output);
             if (stopResult.Success && startResult.Success)
@@ -83,6 +85,8 @@ namespace CgminerMonitorClient.Workers.Control
             else
             {
                 stopResult = SimpleProcessExecutor.Fire(_controlConfig.CgminerKillCmd, false);
+                if (stopResult.Success && string.IsNullOrEmpty(stopResult.Output))
+                    stopResult = ProcessExecutorResult.Succeeded("OK");
             }
             return stopResult;
         }
