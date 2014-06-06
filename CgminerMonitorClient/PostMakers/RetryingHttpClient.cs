@@ -10,6 +10,7 @@ namespace CgminerMonitorClient.PostMakers
     {
         public StatisticsResultMessage MakePost(object message, PostMakerType postMakerType, string url)
         {
+            Log.Instance.DebugFormat("Hitting '{0}' url.", url);
             for (int i = 0; i < Consts.HttpClientRetries; i++)
             {
                 Log.Instance.DebugFormat("Making {0}st/nd/th request.", i + 1);
@@ -18,7 +19,6 @@ namespace CgminerMonitorClient.PostMakers
                     using (var client = PostMakerFactory.GetPostMaker(postMakerType, Consts.RequestTimeoutInMiliseconds))
                     {
                         client.SetContentTypeHeader("application/json");
-                        Log.Instance.DebugFormat("About to hit '{0}' url.", url);
                         var result = client.UploadString(new Uri(url),
                             JsonConvert.SerializeObject(message));
                         var deserialized = JsonConvert.DeserializeObject<StatisticsResultMessage>(result);

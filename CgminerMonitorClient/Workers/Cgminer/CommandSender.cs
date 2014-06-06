@@ -21,11 +21,11 @@ namespace CgminerMonitorClient.Workers.Cgminer
                 socket.SendTimeout = (int)TimeSpan.FromSeconds(20).TotalMilliseconds;
                 socket.ReceiveTimeout = (int)TimeSpan.FromSeconds(20).TotalMilliseconds;
 
-                Log.Instance.DebugFormat("Connecting to {0}", remoteEndIp);
+                //Log.Instance.DebugFormat("Connecting to {0}", remoteEndIp);
                 socket.Connect(remoteEndIp);
                 var bytesSent = Encoding.UTF8.GetBytes(message);
 
-                Log.Instance.Debug("Sending message...");
+                //Log.Instance.Debug("Sending message...");
                 socket.Send(bytesSent);
                 int bytesRead;
                 var resultSb = new StringBuilder();
@@ -35,13 +35,13 @@ namespace CgminerMonitorClient.Workers.Cgminer
                     resultSb.Append(Encoding.UTF8.GetString(bytesReceived, 0, bytesRead));
                 }
                 while (bytesRead > 0);
-                Log.Instance.Debug("Received response.");
+                //Log.Instance.Debug("Received response.");
 
                 try
                 {
-                    Log.Instance.Debug("Calling socket.Shutdown.");
+                    //Log.Instance.Debug("Calling socket.Shutdown.");
                     socket.Shutdown(SocketShutdown.Both);
-                    Log.Instance.Debug("Calling socket.Close.");
+                    //Log.Instance.Debug("Calling socket.Close.");
                     socket.Close();
                 }
                 catch (SocketException)
