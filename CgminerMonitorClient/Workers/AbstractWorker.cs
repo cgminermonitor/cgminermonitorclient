@@ -26,6 +26,8 @@ namespace CgminerMonitorClient.Workers
             var config = (Config) configObject;
             try
             {
+                var dumper = new DataDumper(config.RunOptions.DumpFileName, StatisticKey);
+
                 Log.Instance.DebugFormat("Starting {0} worker.", StatisticKey);
                 if (CheckAvailability())
                     Log.Instance.DebugFormat("'{0}' worker is available.", StatisticKey);
@@ -54,6 +56,8 @@ namespace CgminerMonitorClient.Workers
                     }
 
                     Log.Instance.DebugFormat("Getting data for {0} worker succeeded.", StatisticKey);
+                    
+                    dumper.MakeDumpIfNeeded(message);
                     var result = _client.MakePost(message, config.RunOptions.PostMakerType, Consts.StatisticsUrl);
 
                     if (result.Success)
