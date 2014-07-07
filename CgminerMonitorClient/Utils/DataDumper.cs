@@ -15,7 +15,8 @@ namespace CgminerMonitorClient.Utils
         {
             Log.Instance.DebugFormat("Starting '{0}' data dumper", statsKey);
 
-            _dumpFileName = dumpFileName + "_" + statsKey;
+            if (!string.IsNullOrEmpty(dumpFileName))
+                _dumpFileName = dumpFileName + "_" + statsKey;
             _statsKey = statsKey;
         }
 
