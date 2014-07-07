@@ -95,7 +95,8 @@ namespace CgminerMonitorClient
         {
             using (var client = PostMakerFactory.GetPostMaker(postMakerType, Consts.RequestTimeoutInMiliseconds))
             {
-                client.SetContentTypeHeader("application/json");
+                client.SetContentTypeHeader(Consts.ContentTypeAppJsonHeader);
+                client.SetUserAgentHeader(Consts.FakeUserAgentHeader);
                 var sentGuid = Guid.NewGuid().ToString("N");
                 var result = client.UploadString(new Uri(Consts.TroubleshooterUrl), "\"" + sentGuid + "\"");
                 Log.Instance.InfoFormat("Response is: '{0}'", result);

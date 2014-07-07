@@ -6,11 +6,12 @@ namespace CgminerMonitorClient.PostMakers
 {
     public class CurlPostHttpClient : IPostMaker
     {
-        private const string RequestTemplate = @"-X POST -d @- {0} --header ""Content-Type:{1}"" -m {2} -sS";
+        private const string RequestTemplate = @"-X POST -d @- {0} --header ""Content-Type:{1}"" -A ""{2}"" -m {3} -sS";
 
         //time in milliseconds
         private readonly int _timeout;
-        private string _contentTypeHeader = "application/json";
+        private string _contentTypeHeader = Consts.ContentTypeAppJsonHeader;
+        private string _userAgentHeader;
 
         public CurlPostHttpClient(int timeout)
         {
@@ -19,7 +20,10 @@ namespace CgminerMonitorClient.PostMakers
 
         public string UploadString(Uri address, string data)
         {
-            var parameters = string.Format(RequestTemplate, address, _contentTypeHeader, _timeout / 1000);
+            if (string.IsNullOrEmpty(_userAgentHeader))
+                throw new Exception("User-Agent header was not set.");
+
+            var parameters = string.Format(RequestTemplate, address, _contentTypeHeader, _userAgentHeader, _timeout / 1000);
             var ps = new ProcessStartInfo("curl", parameters)
             {
                 UseShellExecute = false,
@@ -57,6 +61,11 @@ namespace CgminerMonitorClient.PostMakers
         public void SetContentTypeHeader(string type)
         {
             _contentTypeHeader = type;
+        }
+
+        public void SetUserAgentHeader(string userAgent)
+        {
+            _userAgentHeader = userAgent;
         }
     }
 }

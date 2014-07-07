@@ -56,5 +56,8 @@ namespace CgminerMonitorClient
 
         public static string SuccessCommandPrefix = "Success! ";
         public static string CgminerCommandTemplate = @"{{ ""command"": ""{0}"", ""devs"": ""{1}"" }}";
+
+        public static string FakeUserAgentHeader = @"Mozilla/5.0 (Windows NT 6.2; WOW64; rv:30.0) Gecko/20100101 Firefox/30.0";
+        public static string ContentTypeAppJsonHeader = @"application/json";
     }
 }

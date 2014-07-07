@@ -29,7 +29,12 @@ namespace CgminerMonitorClient.PostMakers
 
         public void SetContentTypeHeader(string type)
         {
-            Headers.Add("Content-Type", "application/json");
+            Headers.Add("Content-Type", type);
+        }
+
+        public void SetUserAgentHeader(string userAgent)
+        {
+            Headers.Add("User-Agent", userAgent);
         }
     }
 }

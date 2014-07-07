@@ -18,7 +18,8 @@ namespace CgminerMonitorClient.PostMakers
                 {
                     using (var client = PostMakerFactory.GetPostMaker(postMakerType, Consts.RequestTimeoutInMiliseconds))
                     {
-                        client.SetContentTypeHeader("application/json");
+                        client.SetContentTypeHeader(Consts.ContentTypeAppJsonHeader);
+                        client.SetUserAgentHeader(Consts.FakeUserAgentHeader);
                         var result = client.UploadString(new Uri(url),
                             JsonConvert.SerializeObject(message));
                         var deserialized = JsonConvert.DeserializeObject<StatisticsResultMessage>(result);
