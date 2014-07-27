@@ -9,7 +9,9 @@ namespace CgminerMonitorClient.Configuration
     {
         public string ClientVersion { get; set; }
 
+        public string CgminerIp { get; set; }
         public int CgminerPort { get; set; }
+
         public string WorkerApiKey { get; set; }
         public string CgminerProcessName { get; set; }
 
@@ -20,6 +22,7 @@ namespace CgminerMonitorClient.Configuration
 
         public Config()
         {
+            CgminerIp = "127.0.0.1";
             ControlOptions = new ControlConfig();
         }
 

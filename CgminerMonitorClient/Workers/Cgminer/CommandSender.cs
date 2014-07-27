@@ -8,12 +8,12 @@ namespace CgminerMonitorClient.Workers.Cgminer
 {
     public class CommandSender
     {
-        public static string SendMessage(string message, int port)
+        public static string SendMessage(string message, string ip, int port)
         {
             var bytesReceived = new byte[256];
             var socketPermission = new SocketPermission(NetworkAccess.Connect, TransportType.Tcp, "", -1);
             socketPermission.Demand();
-            var ipAddress = IPAddress.Parse("127.0.0.1");
+            var ipAddress = IPAddress.Parse(ip);
             var remoteEndIp = new IPEndPoint(ipAddress, port);
             using (var socket = new Socket(remoteEndIp.AddressFamily, SocketType.Stream, ProtocolType.Tcp))
             {

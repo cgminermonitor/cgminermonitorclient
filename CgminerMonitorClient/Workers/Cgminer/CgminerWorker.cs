@@ -29,7 +29,7 @@ namespace CgminerMonitorClient.Workers.Cgminer
                 Log.Instance.DebugFormat("Sending {0} to cgminer.", cgminerCommand);
                 try
                 {
-                    var response = CommandSender.SendMessage(cgminerCommand, config.CgminerPort);
+                    var response = CommandSender.SendMessage(cgminerCommand, config.CgminerIp, config.CgminerPort);
                     if (string.IsNullOrEmpty(response))
                     {
                         Log.Instance.DebugFormat("'{0}' command sent to cgminer resulted in empty response.", cgminerCommand);

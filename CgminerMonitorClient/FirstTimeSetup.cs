@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Net;
 using System.Threading;
 using CgminerMonitorClient.CgminerMonitor.Common;
 using CgminerMonitorClient.Configuration;
@@ -32,13 +33,28 @@ namespace CgminerMonitorClient
                 }
             }
             Log.Instance.Info("\t4. Configure cgminer:");
-            Log.Instance.InfoRaw(@"Pass additional command-line arguments: 
+            Log.Instance.InfoRaw(@"Pass additional command-line arguments (adjust 127.0.0.1 to your IP, if cgminer is on another machine): 
         --api-listen --api-allow W:127.0.0.1
 Or add additional configuration file entries: 
         ""api-listen"" : true,
         ""api-allow"" : ""W:127.0.0.1""
 Press enter when you are done.");
-            Log.Instance.Info("\t5. If you changed default API port, type it now. Otherwise press enter.");
+            Log.Instance.Info("\t5. If cgminer is on another machine, type it's IP now. Otherwise press enter.");
+            while (true)
+            {
+                var probableCgminerIp = Console.ReadLine();
+                IPAddress ipAddress;
+                if (string.IsNullOrEmpty(probableCgminerIp))
+                    break;
+                if (!IPAddress.TryParse(probableCgminerIp, out ipAddress))
+                    Log.Instance.Info(string.Format("'{0}' is an invalid IP address. Try again.", probableCgminerIp));
+                else
+                {
+                    config.CgminerIp = probableCgminerIp;
+                    break;
+                }
+            }
+            Log.Instance.Info("\t6. If you changed default API port, type it now. Otherwise press enter.");
             var port = 4028;
             while (true)
             {
@@ -59,12 +75,12 @@ Press enter when you are done.");
                 }
             }
             config.CgminerPort = port;
-            Log.Instance.Info("\t6. Checking read-write permissions.");
+            Log.Instance.Info("\t7. Checking read-write permissions.");
             if (PermissionCheckSucceeded())
                 Log.Instance.Info("\t\tAll is good.");
             
             var exampleProcessName = PlatformCheck.AreWeRunningUnderWindows() ? "cgminer.exe" : "cgminer";
-            config.CgminerProcessName = GetStringAnswerToQuestion("\t7. What is cgminer process name? Example: " + exampleProcessName + " (may be different when using e.g. vertminer)");
+            config.CgminerProcessName = GetStringAnswerToQuestion("\t8. What is cgminer process name? Example: " + exampleProcessName + " (may be different when using e.g. vertminer)");
 
             ConfigureRemoteMinerControl(config.ControlOptions);
             config.ControlOptions.Bootstrap(config.CgminerProcessName);
@@ -76,7 +92,7 @@ Press enter when you are done.");
 
         private static void ConfigureRemoteMinerControl(ControlConfig config)
         {
-            Log.Instance.Info("\t8. Remote miner control. (Answer with 'y' or 'n')");
+            Log.Instance.Info("\t9. Remote miner control. (Answer with 'y' or 'n')");
             Log.Instance.Info("\t\t NOTE: if you have security concerns please read http://cgminermonitor.com/Faq.");
             var currentClientMetadata = ClientMetadata.GetCurrentClientMetadata();
             config.AllowWorkerPowerControl = GetYnAnswerToQuestion("\t\t Do you want to be able to reboot or shutdown your worker from the website?");
